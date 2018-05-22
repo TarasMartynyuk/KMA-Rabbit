@@ -1,48 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour 
+namespace PlayerControl
 {
-    // per second
-    [SerializeField] 
-    float _speed;
+    public class PlayerController : MonoBehaviour 
+    {
+        // per second
+        [SerializeField] 
+        float _speed;
 
-    PlayerMovement _playerMovement;
+        [SerializeField]
+        Transform _groundCheck;
+        [SerializeField]
+        LayerMask _whatIsGround;
+        [SerializeField]
+        float _jumpTime;
+        [SerializeField]
+        float _jumpForceMagnitude;
 
-    #region Unity methods
-    void Start () 
-	{
-	    InitComponents();
-	}
+
+        PlayerMovement _playerMovement;
+        PlayerJump _playerJump;
+
+        #region Unity methods
+        void Start () 
+        {
+            InitComponents();
+        }
 	
-	void Update () 
-	{
-	    UpdateComponents();
-	}
+        void Update () 
+        {
+            UpdateComponents();
+        }
 
-    void FixedUpdate()
-    {
-        FixUpdateComponents();
+        void FixedUpdate()
+        {
+            FixUpdateComponents();
+        }
+        #endregion
+
+        #region helpers
+        void InitComponents()
+        {
+            var rb = GetComponent<Rigidbody2D>();
+            _playerMovement = new PlayerMovement(rb, transform, _speed);
+            _playerJump = new PlayerJump(
+                rb, _groundCheck, _whatIsGround, 
+                _jumpForceMagnitude, _jumpTime);
+        }
+
+        void UpdateComponents()
+        {
+            _playerMovement.Update();
+            _playerJump.Update();
+        }
+
+        void FixUpdateComponents()
+        {
+            _playerMovement.FixedUpdate();
+            _playerJump.FixedUpdate();
+        }
+        #endregion
     }
-    #endregion
-
-    #region helpers
-    void InitComponents()
-    {
-        var rb = GetComponent<Rigidbody2D>();
-        _playerMovement = new PlayerMovement(rb, transform, _speed);
-
-    }
-
-    void UpdateComponents()
-    {
-        _playerMovement.Update();
-    }
-
-    void FixUpdateComponents()
-    {
-        _playerMovement.FixedUpdate();
-    }
-    #endregion
 }
