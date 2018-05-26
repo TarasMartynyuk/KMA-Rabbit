@@ -3,13 +3,18 @@ using static UnityEngine.Debug;
 
 namespace PlayerControl
 {
+    /// <summary>
+    /// pushes rigidbody upwards when user gives us jump input,
+    /// prolonging the jump if the user holds the jump button
+    /// </summary>
     public class PlayerJump
     {
         readonly Transform _groundCheck;
         readonly LayerMask _whatIsGround;
         readonly Rigidbody2D _rb;
         /// <summary>
-        /// how long do we respond to the users jump input
+        /// after _jumpTime seconds has elapsed since the jump start,
+        /// user's input (if he holds the jump button) is not count to prolong the jump
         /// </summary>
         readonly float _jumpTime;
         readonly float _jumpYVelocity;
