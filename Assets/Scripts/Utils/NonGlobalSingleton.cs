@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// it acts as a singleton, but without "providing the global point of access" - which i don't want to
-/// it only ensures that only a single instance is created, using the static variable for that
-/// </summary>
-public class NonGlobalSingleton<T>: MonoBehaviour where T : Component
+namespace Utils
 {
-    static T instance;
-
-    protected virtual void Awake()
+    /// <summary>
+    /// it acts as a singleton, but without "providing the global point of access" - which i don't want to
+    /// it only ensures that only a single instance is created, using the static variable for that
+    /// </summary>
+    public class NonGlobalSingleton<T>: MonoBehaviour where T : Component
     {
-        if(instance == null)
+        static T instance;
+
+        protected virtual void Awake()
         {
-            instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Debug.LogError($"more than one instance of {typeof(T)} was created!");
-            Destroy(gameObject);
+            if(instance == null)
+            {
+                instance = this as T;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Debug.LogError($"more than one instance of {typeof(T)} was created!");
+                Destroy(gameObject);
+            }
         }
     }
 }

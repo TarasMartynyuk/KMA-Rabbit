@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Utils;
 //using static System.Diagnostics.Debug;
 using static UnityEngine.Debug;
 
@@ -25,7 +26,7 @@ public class CameraFollow : MonoBehaviour
 	{
 	    AssertEditorVarsValid();
 		
-		_screenDims = GetScreenDims();
+		_screenDims = new CameraWorlCoordsMover(_mainCamera).GetScreenDimsInWorldCoords();
         _worldPointOffset = GetCenterOffsetInWorldCoords();
 	}
 	
@@ -43,21 +44,6 @@ public class CameraFollow : MonoBehaviour
 	    float centerOffsetY = _yOffset - 0.5f;
 
         return - ElementviseMult(new Vector2(centerOffsetX, centerOffsetY), _screenDims);
-	}
-
-	Vector2 GetScreenDims()
-	{
-        var botLeft = _mainCamera.ViewportToWorldPoint(new Vector3(0f, 0f, 10f));
-        var topRight = _mainCamera.ViewportToWorldPoint(new Vector3(1f, 1f, 10f));
-
-        var dims = topRight - botLeft;
-        Assert(dims.x > 0f && dims.y > 0f);
-
-        // why this line below returns the vector which is half of the dims?
-        //var k = new Vector3(Screen.width, Screen.height, 10);
-
-        // return Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 10));
-		return dims;
 	}
 
     void AssertEditorVarsValid()
