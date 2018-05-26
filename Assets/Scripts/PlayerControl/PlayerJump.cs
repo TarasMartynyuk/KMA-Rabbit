@@ -45,20 +45,16 @@ namespace PlayerControl
             {
                 _jumping = true;
                 ResetJumpCounter();
-                Log("started jumping");
-
             }
             else if(Input.GetButton("Jump") && _jumping)
             {
                 _jumpTimeCounter -= Time.deltaTime;
-                Log($"counter: {_jumpTimeCounter}");
                 if(_jumpTimeCounter <= 0)
-                    { _jumping = false;  Log("finished jumping due to timer"); }
+                    { _jumping = false; }
 
             } 
             else if(Input.GetButtonUp("Jump"))
             {
-                Log("finished jumping");
                 _jumping = false;
 
             }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.Debug;
 
-public class NewBehaviourScript : MonoBehaviour 
+public class Rabbit : MonoBehaviour 
 {
     [SerializeField] 
     int _lives;
@@ -14,11 +14,17 @@ public class NewBehaviourScript : MonoBehaviour
         private set { _lives = value; }
     }
 
-    public void LoseLife()
+    /// <summary>
+    /// returns true if rabbit died due to inflicted damage
+    /// </summary>
+    public bool LoseLife()
     {
-        if(Lives == 1) 
-            { Log("rabbit died"); }
+        if(Lives == 1)
+        {
+            Log("rabbit died");
+        }
 
         Lives--;
+        return Lives <= 0;
     }
 }

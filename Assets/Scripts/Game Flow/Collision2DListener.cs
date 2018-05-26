@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -11,13 +9,12 @@ using UnityEngine;
 /// this way, any other C# class can subscribe and handle collisions of this gameobject
 /// the cached members of the class are hardcoded for my particular case
 /// </remarks>
-public class CollisionListener : MonoBehaviour 
+public class Trigger2DListener : MonoBehaviour 
 {
-    public event Action<Collision> OnEnteredCollision;
+    public event Action<Collider2D> OnEnteredCollision;
 
-
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        OnEnteredCollision?.Invoke(collision);
+        OnEnteredCollision?.Invoke(other);
     }
 }
