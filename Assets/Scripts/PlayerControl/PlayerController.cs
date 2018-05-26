@@ -42,7 +42,9 @@ namespace PlayerControl
         void InitComponents()
         {
             var rb = GetComponent<Rigidbody2D>();
-            _playerMovement = new PlayerMovement(rb, transform, _speed);
+            var anim = GetComponent<Animator>();
+
+            _playerMovement = new PlayerMovement(rb, transform, _speed, anim);
             _playerJump = new PlayerJump(
                 rb, _groundCheck, _whatIsGround, 
                 _jumpForceMagnitude, _jumpTime);

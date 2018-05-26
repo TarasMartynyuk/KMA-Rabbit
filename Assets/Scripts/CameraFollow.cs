@@ -27,10 +27,6 @@ public class CameraFollow : MonoBehaviour
 		
 		_screenDims = GetScreenDims();
         _worldPointOffset = GetCenterOffsetInWorldCoords();
-
-
-        Log($"world offset {_worldPointOffset}");
-        Log(GetScreenDims());
 	}
 	
 	void Update () 

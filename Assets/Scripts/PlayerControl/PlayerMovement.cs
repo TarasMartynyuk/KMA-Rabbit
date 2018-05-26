@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace PlayerControl
 {
@@ -23,31 +24,40 @@ namespace PlayerControl
 
         readonly Rigidbody2D _rb;
         readonly Transform _transform;
+        readonly Animator _anim;
 
+        readonly int _runningParamId;
         bool _facingRight = true;
+        float _move;
 
-        public PlayerMovement(Rigidbody2D rb, Transform transform, float speed)
+        public PlayerMovement(Rigidbody2D rb, Transform transform, 
+            float speed, Animator anim)
         {
             _rb = rb;
             _transform = transform;
             _speed = speed;
+
+            _runningParamId = Animator.StringToHash("Running");
+
+            AssertAnimator.HasParameter(_runningParamId, anim);
+            Assert.IsFalse(anim.GetBool(_runningParamId));
+            _anim = anim;
         }
 
         public void Update()
         {
+            _move = Input.GetAxis("Horizontal");
+            _anim.SetBool(_runningParamId, Mathf.Abs(_move) > 0);
         }
 
 
         // Update is called once per frame
         public void FixedUpdate()
         {
-            //grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-            float move = Input.GetAxis("Horizontal");
+            _rb.velocity = new Vector2(_move * _speed, _rb.velocity.y);
 
-            _rb.velocity = new Vector2(move * _speed, _rb.velocity.y);
-
-            if (_facingRight && move < 0 ||
-                ! _facingRight && move > 0)
+            if (_facingRight && _move < 0 ||
+                ! _facingRight && _move > 0)
             { Turn(); }
         }
 

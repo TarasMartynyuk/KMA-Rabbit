@@ -67,14 +67,7 @@ namespace PlayerControl
             if(_jumping)
             {
                 _rb.velocity = new Vector2 (_rb.velocity.x, _jumpYVelocity);
-                //_jumping = false;
             }
- 
-            //if(Input.GetButton("Jump") && _jumpTimeCounter > 0)
-            //{
-            //    _rb.velocity = new Vector2 (_rb.velocity.x, _jumpYVelocity);
-            //    _jumpTimeCounter -= Time.deltaTime;
-            //}
         }
 
         void ResetJumpCounter()

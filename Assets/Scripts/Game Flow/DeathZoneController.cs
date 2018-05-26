@@ -1,4 +1,5 @@
 ﻿using System;
+using Actors;
 using UnityEngine;
 
 /// <summary>
@@ -34,7 +35,14 @@ public class DeathZoneController : NonGlobalSingleton<DeathZoneController>
 
         if(Array.IndexOf(_deathzones, collision.gameObject) >= 0)
         {
-            Debug.Log("rabbit collided");
+            if(_rabbit.LoseLife()) 
+                { RespawnRabbit(); }
         }
+    }
+
+    void RespawnRabbit()
+    {
+        _rabbit.transform.position = _respawnPoint.transform.position;
+        _rabbit.ResetLives();
     }
 }
