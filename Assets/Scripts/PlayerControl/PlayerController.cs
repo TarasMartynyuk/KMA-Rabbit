@@ -47,18 +47,18 @@ namespace PlayerControl
             _playerMovement = new PlayerMovement(rb, transform, _speed, anim);
             _playerJump = new PlayerJump(
                 rb, _groundCheck, _whatIsGround, 
-                _jumpForceMagnitude, _jumpTime);
+                _jumpForceMagnitude, _jumpTime, anim);
         }
 
         void UpdateComponents()
         {
-            _playerMovement.Update();
+            //_playerMovement.Update();
             _playerJump.Update();
         }
 
         void FixUpdateComponents()
         {
-            _playerMovement.FixedUpdate();
+            //_playerMovement.FixedUpdate();
             _playerJump.FixedUpdate();
         }
         #endregion
