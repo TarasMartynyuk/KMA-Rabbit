@@ -52,13 +52,13 @@ namespace PlayerControl
 
         void UpdateComponents()
         {
-            //_playerMovement.Update();
+            _playerMovement.Update();
             _playerJump.Update();
         }
 
         void FixUpdateComponents()
         {
-            //_playerMovement.FixedUpdate();
+            _playerMovement.FixedUpdate();
             _playerJump.FixedUpdate();
         }
         #endregion
