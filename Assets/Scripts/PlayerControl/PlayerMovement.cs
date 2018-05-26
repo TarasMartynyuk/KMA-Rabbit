@@ -47,7 +47,10 @@ namespace PlayerControl
         public void Update()
         {
             _move = Input.GetAxis("Horizontal");
-            _anim.SetBool(_runningParamId, Mathf.Abs(_move) > 0);
+
+            if(Mathf.Abs(_move) > 0.0f) { Debug.Log(_move); }
+
+            _anim.SetBool(_runningParamId, Mathf.Abs(_move) > 0.0f);
         }
 
 
