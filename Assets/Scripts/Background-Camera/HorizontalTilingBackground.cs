@@ -1,56 +1,34 @@
 ﻿using System;
 using UnityEngine;
-using Utils;
 using UnityEngine.Assertions;
 
-public class HorizontalParalaxBackground : MonoBehaviour 
+public class HorizontalTilingBackground 
 {
-    [SerializeField]
-    Camera _camera;
-    [SerializeField]
-    CompositeBackground _background;
-    [SerializeField]
-    CompositeBackground _backgroundCopy;
-
-    Vector3 CameraPosition => _camera.transform.position;
-
     const float BgChangeTolerance = 0f;
 
-    CameraWorldCoordsWrapper _cameraWorldWrapper;
-    SpriteInWorldMover _bgMover;
-    SpriteInWorldMover _copyBgMover;
+    readonly CameraWorldWrapper _cameraWorldWrapper;
+    readonly SpriteInWorldMover _bgMover;
+    readonly SpriteInWorldMover _copyBgMover;
 
-    void Start()
+    public HorizontalTilingBackground(Camera camera, CompositeBackground background, CompositeBackground backgroundCopy)
     {
-        AssertBackgroundsDimsAreEqual();
-        _cameraWorldWrapper = new CameraWorldCoordsWrapper(_camera);
+        if(! BackgroundsDimsEqual(background, backgroundCopy))
+            { throw new ArgumentException("backgrounds must have equal sizes"); }
 
-        AssertBackgroundLargerThanScreen();
+        _cameraWorldWrapper = new CameraWorldWrapper(camera);
 
+        if(! BackgroundLargerThanScreen(background, _cameraWorldWrapper)) 
+            { throw new ArgumentException("background must be larger than screen (in world units)"); }
 
-
-        _bgMover = new SpriteInWorldMover(_background.BoundingSprite, _background.gameObject);
-        _copyBgMover = new SpriteInWorldMover(_backgroundCopy.BoundingSprite, _backgroundCopy.gameObject);
-
-
-        Debug.Log($"TopLeft {_bgMover.TopLeft}");
-        Debug.Log($"TopRight {_bgMover.TopRight}");
-        Debug.Log($"BotRight {_bgMover.BotRight}");
-        Debug.Log($"BotLeft {_bgMover.BotLeft}");
-
-
-        Debug.Log($"camera dims {_cameraWorldWrapper.GetScreenDimsInWorldCoords()}");
-
-        Debug.Log($"camera right bound {_cameraWorldWrapper.RightBound + BgChangeTolerance}");
-        Debug.Log($"current bg right bound {_bgMover.RightBound}");
-
+        _bgMover = new SpriteInWorldMover(background.BoundingSprite, background.gameObject);
+        _copyBgMover = new SpriteInWorldMover(backgroundCopy.BoundingSprite, backgroundCopy.gameObject);
 
         // place the one copy of bg at the center of the camera, the other tiled to the left
-        _bgMover.MoveCenter(CameraPosition);
+        _bgMover.MoveCenter(_cameraWorldWrapper.Position);
         TileSpriteToTheLeft(_bgMover, _copyBgMover);
     }
 
-    void Update()
+    public void Update()
     {
         TileAuxBackgroundIfCameraOutOfBounds();
     }
@@ -58,14 +36,14 @@ public class HorizontalParalaxBackground : MonoBehaviour
     void TileAuxBackgroundIfCameraOutOfBounds()
     {
         // get currently shown background
-        var currentlyShownBg = _bgMover.Contains(CameraPosition) ?
+        var currentlyShownBg = _bgMover.Contains(_cameraWorldWrapper.Position) ?
             _bgMover : _copyBgMover;
 
         var otherBg = GetOtherBackground(currentlyShownBg);
 
 
-        Debug.Log($"BG LB: {currentlyShownBg.LeftBound}, CAM LB: {_cameraWorldWrapper.LeftBound}," + 
-                  $" OUT? : {CameraOutOfLeftBound(currentlyShownBg)}");
+        //Debug.Log($"BG LB: {currentlyShownBg.LeftBound}, CAM LB: {_cameraWorldWrapper.LeftBound}," + 
+        //          $" OUT? : {CameraOutOfLeftBound(currentlyShownBg)}");
 
         if (CameraOutOfRightBound(currentlyShownBg) && otherBg.Center.x < currentlyShownBg.Center.x)
         {
@@ -74,6 +52,7 @@ public class HorizontalParalaxBackground : MonoBehaviour
         }
         else if (CameraOutOfLeftBound(currentlyShownBg) && otherBg.Center.x > currentlyShownBg.Center.x)
         {
+            Debug.Log("tiled to left");
             TileSpriteToTheLeft(currentlyShownBg, otherBg);
         }
     }
@@ -116,19 +95,19 @@ public class HorizontalParalaxBackground : MonoBehaviour
             _copyBgMover : _bgMover;
     }
 
-    #region assert
-    void AssertBackgroundsDimsAreEqual()
+    #region validation
+    static bool BackgroundsDimsEqual(CompositeBackground bg, CompositeBackground otherBg)
     {
-        Assert.AreEqual(_background.BoundingSprite.bounds.size, _backgroundCopy.BoundingSprite.bounds.size);
+        return bg.BoundingSprite.bounds.size == otherBg.BoundingSprite.bounds.size;
     }
 
-    void AssertBackgroundLargerThanScreen()
+    static bool BackgroundLargerThanScreen(CompositeBackground bg, CameraWorldWrapper camera)
     {
-        var cameraArea =  _cameraWorldWrapper.GetScreenDimsInWorldCoords().magnitude;
-        var backgroundDims = _background.BoundingSprite.bounds.size;
+        var cameraArea =  camera.GetScreenDimsInWorldCoords().magnitude;
+        var backgroundDims = bg.BoundingSprite.bounds.size;
         backgroundDims.z = 0;
 
-        Assert.IsTrue(backgroundDims.magnitude > cameraArea);
+        return backgroundDims.magnitude > cameraArea;
     }
     #endregion
 }

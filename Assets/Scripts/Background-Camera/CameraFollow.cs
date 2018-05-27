@@ -24,7 +24,7 @@ public class CameraFollow : MonoBehaviour
 	{
 	    AssertEditorVarsValid();
 		
-		_screenDims = new CameraWorldCoordsWrapper(_mainCamera).GetScreenDimsInWorldCoords();
+		_screenDims = new CameraWorldWrapper(_mainCamera).GetScreenDimsInWorldCoords();
         _worldPointOffset = GetCenterOffsetInWorldCoords();
 	}
 	
@@ -49,6 +49,4 @@ public class CameraFollow : MonoBehaviour
         Assert(_xOffset >= 0 && _xOffset <= 1, "X Offset must be in range [0, 1] - it is in viewport coords");
         Assert(_yOffset >= 0 && _yOffset <= 1, "Y Offset must be in range [0, 1] - it is in viewport coords");
     }
-
-
 }
