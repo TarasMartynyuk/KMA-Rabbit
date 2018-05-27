@@ -1,17 +1,27 @@
 ﻿using UnityEngine;
 
-public class MovingHorizontalTilingBackground : MonoBehaviour 
+namespace MonoBehaviours
 {
+    public class MovingHorizontalTilingBackground : HorizontalTilingBackgroundEditorData
+    {
+        GameObjectMovementDependency _backgroundMoveDependency;
+        GameObjectMovementDependency _copyBackgroundMoveDependency;
 
-	// Use this for initialization
-	void Start () 
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
+        protected override void Start()
+        {
+            base.Start();
+            _backgroundMoveDependency = new GameObjectMovementDependency(
+                _camera.gameObject, _background, 0.5f);
+
+            _copyBackgroundMoveDependency = new GameObjectMovementDependency(
+                _camera.gameObject, _backgroundCopy, 0.5f);
+        }
+
+        void Update()
+        {
+            _backgroundMoveDependency.Update();
+            _copyBackgroundMoveDependency.Update();
+            _tilingBackground.Update();
+        }
+    }
 }

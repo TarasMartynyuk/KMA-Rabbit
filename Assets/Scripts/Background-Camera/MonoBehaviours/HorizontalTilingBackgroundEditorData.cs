@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using MonoBehaviours;
+using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Assets.Scripts.Background_Camera.MonoBehaviours
+namespace MonoBehaviours
 {
-    abstract class HorizontalTilingBackgroundEditorInputProvider : MonoBehaviour
+    public abstract class HorizontalTilingBackgroundEditorData : MonoBehaviour
     {
         [SerializeField]
         protected Camera _camera;

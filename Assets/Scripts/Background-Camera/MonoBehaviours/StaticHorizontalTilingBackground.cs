@@ -1,9 +1,10 @@
-﻿using Assets.Scripts.Background_Camera.MonoBehaviours;
-
-class StaticHorizontalTilingBackground : HorizontalTilingBackgroundEditorInputProvider
+﻿namespace MonoBehaviours
 {
-    void Update()
+    class StaticHorizontalTilingBackground : HorizontalTilingBackgroundEditorData
     {
-        _tilingBackground.Update();
+        void Update()
+        {
+            _tilingBackground.Update();
+        }
     }
 }
