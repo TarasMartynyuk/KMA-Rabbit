@@ -1051,7 +1051,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1032488495821586, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
       propertyPath: m_Name
-      value: FurtherStatic (1)
+      value: Sky Copy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
@@ -1554,6 +1554,10 @@ Prefab:
     - target: {fileID: 4650879059578482, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032488495821586, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
+      propertyPath: m_Name
+      value: Sky
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
