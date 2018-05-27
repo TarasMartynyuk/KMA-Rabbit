@@ -26,7 +26,7 @@ public class CameraFollow : MonoBehaviour
 	{
 	    AssertEditorVarsValid();
 		
-		_screenDims = new CameraWorlCoordsMover(_mainCamera).GetScreenDimsInWorldCoords();
+		_screenDims = new CameraWorldCoordsWrapper(_mainCamera).GetScreenDimsInWorldCoords();
         _worldPointOffset = GetCenterOffsetInWorldCoords();
 	}
 	

@@ -1,0 +1,3 @@
+As stated in this answer, any files placed inside this folder will not compile at all
+
+https://answers.unity.com/questions/138286/can-i-put-scripts-somewhere-so-they-dont-compile.html

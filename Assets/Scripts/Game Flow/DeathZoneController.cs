@@ -34,8 +34,6 @@ namespace Game_Flow
 
         void OnRabbitEnterredCollision(Collider2D collision)
         {
-            Debug.Log("Triggered");
-
             if(Array.IndexOf(_deathzones, collision.gameObject) >= 0)
             {
                 if(_rabbit.LoseLife()) 

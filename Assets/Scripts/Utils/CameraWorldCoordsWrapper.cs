@@ -3,13 +3,20 @@ using UnityEngine.Assertions;
 
 namespace Utils
 {
-    class CameraWorlCoordsMover
+    class CameraWorldCoordsWrapper
     {
+        public float RightBound => _camera.transform.position.x + _cameraXOffset;
+        public float LeftBound =>  _camera.transform.position.x - _cameraXOffset;
+
         readonly Camera _camera;
 
-        public CameraWorlCoordsMover(Camera camera)
+        // half of screen width in world coords
+        readonly float _cameraXOffset;
+
+        public CameraWorldCoordsWrapper(Camera camera)
         {
             _camera = camera;
+            _cameraXOffset = GetScreenDimsInWorldCoords().x / 2;
         }
 
         public Vector2 GetScreenDimsInWorldCoords()

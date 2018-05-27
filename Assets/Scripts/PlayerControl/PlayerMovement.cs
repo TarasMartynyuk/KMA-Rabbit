@@ -49,8 +49,6 @@ namespace PlayerControl
         {
             _move = Input.GetAxis("Horizontal");
 
-            if(Mathf.Abs(_move) > 0.0f) { Debug.Log(_move); }
-
             _anim.SetBool(_runningParamId, Mathf.Abs(_move) > 0.0f);
         }
 

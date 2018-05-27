@@ -1,30 +1,71 @@
 ﻿using UnityEngine;
 using Utils;
+using UnityEngine.Assertions;
 
 public class ParalaxBackground : MonoBehaviour 
 {
     [SerializeField]
     Camera _camera;
     [SerializeField]
-    GameObject _background;
+    CompositeBackground _background;
     [SerializeField]
-    GameObject _backgroundCopy;
+    CompositeBackground _backgroundCopy;
 
-    // half of screen width in world coords
-    float _cameraYOffset;
+    CameraWorldCoordsWrapper _cameraWorldCoordsWrapper;
+    SpriteInWorldMover _backgroundMover;
+    SpriteInWorldMover _backgroundCopyMover;
 
     void Awake()
     {
-        _cameraYOffset = CameraUtils.GetScreenDimsInWorldCoords(_camera).x / 2;
+        _cameraWorldCoordsWrapper = new CameraWorldCoordsWrapper(_camera);
+
     }
 
-    float ScreenRightBoundInWorldCoords()
+    void Start()
     {
-        return _camera.transform.position.x + _cameraYOffset;
+        _backgroundMover = new SpriteInWorldMover(_background.BoundingSprite, _background.gameObject);
+        _backgroundCopyMover = new SpriteInWorldMover(_backgroundCopy.BoundingSprite, _backgroundCopy.gameObject);
+
+        Debug.Log($"sprite min: {_background.BoundingSprite.bounds.min}");
+        Debug.Log($"sprite max: {_background.BoundingSprite.bounds.max}");
+        Debug.Log($"sprite dims: {_background.BoundingDimentions}");
+
+
+
+        // place the one copy of bg at the center of the camera, the other tiled to the left
     }
 
-    float ScreenLeftBoundInWorldCoords()
+
+    //bool CamereCenterInsideBackground(SpriteWorldMover background)
+    //{
+
+    //}
+
+
+    /// <summary>
+    /// tiles one sprite to the right of another:
+    /// places the <paramref name="movingSpriteIn"/> so that it's top left corner 
+    /// is at the <paramref name="staticSpriteIn"/>'s top right corner, 
+    /// making a seemless connection
+    /// </summary>
+    static void TileSpriteToTheRight(SpriteInWorldMover staticSpriteIn, SpriteInWorldMover movingSpriteIn)
     {
-        return _camera.transform.position.x - _cameraYOffset;
+
+    }
+
+    /// <summary>
+    /// tiles one sprite to the left of another:
+    /// places the <paramref name="movingSpriteIn"/> so that it's top right corner 
+    /// is at the <paramref name="staticSpriteIn"/>'s top left corner, 
+    /// making a seemless connection
+    /// </summary>
+    static void TileSpriteToTheLeft(SpriteInWorldMover staticSpriteIn, SpriteInWorldMover movingSpriteIn)
+    {
+
+    }
+
+    void AssertBackgroundsDimsAreEqual()
+    {
+        //Assert.AreEqual(_background.Boun)
     }
 }
