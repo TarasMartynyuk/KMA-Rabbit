@@ -1,17 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Utils
 {
     public class SpriteInWorldMover
     {
-        public float LeftBounds => _spriteRenderer.bounds.min.x;
+        #region bounds props
+        // actually this props exist just for readability
+        public Vector2 BotLeft => _spriteRenderer.bounds.min;
+        public Vector2 TopRight => _spriteRenderer.bounds.max;
+        public Vector2 TopLeft => new Vector2(BotLeft.x, TopRight.y);
+        public Vector2 BotRight => new Vector2(TopRight.x, BotLeft.y);
 
-        public float RightBounds => _spriteRenderer.bounds.max.x;
+        public float LeftBound => TopLeft.x;
+        public float TopBound =>  TopLeft.y;
+        public float RightBound => BotRight.x;
+        public float BotBound =>  BotRight.y;
 
-        public float TopBounds =>  _spriteRenderer.bounds.min.y;
-
-        public float BotBounds =>  _spriteRenderer.bounds.max.y;
+        public float HorizExtent => _spriteRenderer.bounds.extents.x;
+        public float VertExtent => _spriteRenderer.bounds.extents.y;
+        #endregion
 
         readonly SpriteRenderer _spriteRenderer;
 
@@ -21,15 +30,16 @@ namespace Utils
         /// it will be moved based on the offsets calculated using sprite
         /// </summary>
         readonly GameObject _spriteParent;
-        readonly float _horizExtent;
 
         public SpriteInWorldMover(SpriteRenderer spriteRenderer, GameObject spriteParent)
         {
+            if(spriteParent.transform.position != spriteRenderer.bounds.center)
+            {
+                throw new ArgumentException($"{nameof(spriteParent)} " + 
+                                            $"must be positioned in the center of {nameof(spriteRenderer)}");
+            }
             _spriteRenderer = spriteRenderer;
             _spriteParent = spriteParent;
-            _horizExtent = (RightBounds - LeftBounds) / 2;
-
-            Assert.IsTrue(_horizExtent > 0);
         }
 
         /// <summary>
@@ -37,8 +47,37 @@ namespace Utils
         /// </summary>
         public void MoveTopLeftCorner(Vector2 coords)
         {
-            Assert.AreEqual(LeftBounds, coords.x);
-            Assert.AreEqual(TopBounds, coords.y);
+            float spriteAlignedX = coords.x + HorizExtent;
+            float spriteAlignedY = coords.y + VertExtent;
+
+            _spriteParent.transform.position = new Vector3(
+                spriteAlignedX, spriteAlignedY, _spriteParent.transform.position.z);
+
+            Assert.AreEqual(LeftBound, coords.x);
+            Assert.AreEqual(TopBound, coords.y);
+        }
+
+        /// <summary>
+        /// moves the sprite so that it's top left corner has the <paramref name="coords"/> coordinates
+        /// </summary>
+        public void MoveTopRightCorner(Vector2 coords)
+        {
+            float spriteAlignedX = coords.x - HorizExtent;
+            float spriteAlignedY = coords.y - VertExtent;
+
+            _spriteParent.transform.position = new Vector3(
+                spriteAlignedX, spriteAlignedY, _spriteParent.transform.position.z);
+
+            Assert.AreEqual(RightBound, coords.x);
+            Assert.AreEqual(TopBound, coords.y);
+        }
+
+        /// <summary>
+        /// moves the sprite so that it's center has the <paramref name="coords"/> coordinates
+        /// </summary>
+        public void MoveCenter(Vector2 coords)
+        {
+            _spriteParent.transform.position = coords;
         }
     }
 }
