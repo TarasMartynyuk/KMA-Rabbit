@@ -53,8 +53,8 @@ public class SpriteInWorldMover
         _spriteParent.transform.position = new Vector3(
             spriteAlignedX, spriteAlignedY, _spriteParent.transform.position.z);
 
-        Assert.AreEqual(LeftBound, coords.x);
-        Assert.AreEqual(TopBound, coords.y);
+        Assert.AreApproximatelyEqual(LeftBound, coords.x, 0.05f);
+        Assert.AreApproximatelyEqual(TopBound, coords.y, 0.05f);
     }
 
     /// <summary>
@@ -67,8 +67,8 @@ public class SpriteInWorldMover
 
         _spriteParent.transform.position = spriteAlignedPos;
 
-        Assert.AreEqual(RightBound, coords.x);
-        Assert.AreEqual(TopBound, coords.y);
+        Assert.AreApproximatelyEqual(RightBound, coords.x, 0.05f);
+        Assert.AreApproximatelyEqual(TopBound, coords.y, 0.05f);
     }
 
     /// <summary>

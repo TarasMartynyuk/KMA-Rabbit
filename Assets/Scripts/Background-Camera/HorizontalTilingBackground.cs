@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class HorizontalTilingBackground 
 {
@@ -10,18 +9,18 @@ public class HorizontalTilingBackground
     readonly SpriteInWorldMover _bgMover;
     readonly SpriteInWorldMover _copyBgMover;
 
-    public HorizontalTilingBackground(Camera camera, CompositeBackground background, CompositeBackground backgroundCopy)
+    public HorizontalTilingBackground(Camera camera, SpriteRenderer sprite, SpriteRenderer spriteCopy)
     {
-        if(! BackgroundsDimsEqual(background, backgroundCopy))
+        if(! BackgroundsDimsEqual(sprite, spriteCopy))
             { throw new ArgumentException("backgrounds must have equal sizes"); }
 
         _cameraWorldWrapper = new CameraWorldWrapper(camera);
 
-        if(! BackgroundLargerThanScreen(background, _cameraWorldWrapper)) 
+        if(! BackgroundLargerThanScreen(sprite, _cameraWorldWrapper)) 
             { throw new ArgumentException("background must be larger than screen (in world units)"); }
 
-        _bgMover = new SpriteInWorldMover(background.BoundingSprite, background.gameObject);
-        _copyBgMover = new SpriteInWorldMover(backgroundCopy.BoundingSprite, backgroundCopy.gameObject);
+        _bgMover = new SpriteInWorldMover(sprite, sprite.gameObject);
+        _copyBgMover = new SpriteInWorldMover(spriteCopy, spriteCopy.gameObject);
 
         // place the one copy of bg at the center of the camera, the other tiled to the left
         _bgMover.MoveCenter(_cameraWorldWrapper.Position);
@@ -96,15 +95,15 @@ public class HorizontalTilingBackground
     }
 
     #region validation
-    static bool BackgroundsDimsEqual(CompositeBackground bg, CompositeBackground otherBg)
+    static bool BackgroundsDimsEqual(SpriteRenderer bg, SpriteRenderer otherBg)
     {
-        return bg.BoundingSprite.bounds.size == otherBg.BoundingSprite.bounds.size;
+        return bg.bounds.size == otherBg.bounds.size;
     }
 
-    static bool BackgroundLargerThanScreen(CompositeBackground bg, CameraWorldWrapper camera)
+    static bool BackgroundLargerThanScreen(SpriteRenderer bg, CameraWorldWrapper camera)
     {
         var cameraArea =  camera.GetScreenDimsInWorldCoords().magnitude;
-        var backgroundDims = bg.BoundingSprite.bounds.size;
+        var backgroundDims = bg.bounds.size;
         backgroundDims.z = 0;
 
         return backgroundDims.magnitude > cameraArea;
