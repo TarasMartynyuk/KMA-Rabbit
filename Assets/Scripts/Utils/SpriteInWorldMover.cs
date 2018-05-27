@@ -13,13 +13,15 @@ namespace Utils
         public Vector2 TopLeft => new Vector2(BotLeft.x, TopRight.y);
         public Vector2 BotRight => new Vector2(TopRight.x, BotLeft.y);
 
-        public float LeftBound => TopLeft.x;
-        public float TopBound =>  TopLeft.y;
-        public float RightBound => BotRight.x;
-        public float BotBound =>  BotRight.y;
+        public float LeftBound => BotLeft.x;
+        public float TopBound =>  TopRight.y;
+        public float RightBound => TopRight.x;
+        public float BotBound =>  BotLeft.y;
 
         public float HorizExtent => _spriteRenderer.bounds.extents.x;
         public float VertExtent => _spriteRenderer.bounds.extents.y;
+
+        public Vector2 Center => _spriteRenderer.bounds.center;
         #endregion
 
         readonly SpriteRenderer _spriteRenderer;
@@ -48,7 +50,7 @@ namespace Utils
         public void MoveTopLeftCorner(Vector2 coords)
         {
             float spriteAlignedX = coords.x + HorizExtent;
-            float spriteAlignedY = coords.y + VertExtent;
+            float spriteAlignedY = coords.y - VertExtent;
 
             _spriteParent.transform.position = new Vector3(
                 spriteAlignedX, spriteAlignedY, _spriteParent.transform.position.z);
@@ -62,11 +64,10 @@ namespace Utils
         /// </summary>
         public void MoveTopRightCorner(Vector2 coords)
         {
-            float spriteAlignedX = coords.x - HorizExtent;
-            float spriteAlignedY = coords.y - VertExtent;
+            var spriteAlignedPos = (Vector3) coords - _spriteRenderer.bounds.extents;
+            spriteAlignedPos.z = _spriteParent.transform.position.z;
 
-            _spriteParent.transform.position = new Vector3(
-                spriteAlignedX, spriteAlignedY, _spriteParent.transform.position.z);
+            _spriteParent.transform.position = spriteAlignedPos;
 
             Assert.AreEqual(RightBound, coords.x);
             Assert.AreEqual(TopBound, coords.y);
@@ -78,6 +79,12 @@ namespace Utils
         public void MoveCenter(Vector2 coords)
         {
             _spriteParent.transform.position = coords;
+        }
+
+        public bool Contains(Vector3 position)
+        {
+            position.z = 0;
+            return _spriteRenderer.bounds.Contains(position);
         }
     }
 }
