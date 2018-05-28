@@ -33,8 +33,6 @@ public class PendulumMovement
 
     public void Update()
     {
-        Collider2D col;
-
         if(_paused)
         {
             _pauseTimer -= Time.deltaTime;

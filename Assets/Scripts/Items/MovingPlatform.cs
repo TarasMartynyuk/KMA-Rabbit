@@ -10,10 +10,12 @@ public class MovingPlatform : MonoBehaviour
     float _pause;
 
     PendulumMovement _pendulumMovement;
+    StickerTrigger _stickerTrigger;
 
 	void Awake() 
 	{
 		_pendulumMovement = new PendulumMovement(transform, _pointB.position, _speed, _pause);
+	    _stickerTrigger = new StickerTrigger(gameObject);
 	}
 	
 	void Update () 

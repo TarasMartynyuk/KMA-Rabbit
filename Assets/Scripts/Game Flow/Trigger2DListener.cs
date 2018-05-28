@@ -13,10 +13,17 @@ namespace Game_Flow
     public class Trigger2DListener : MonoBehaviour 
     {
         public event Action<Collider2D> EnterredTrigger;
+        public event Action<Collider2D> ExitedTrigger;
+
 
         void OnTriggerEnter2D(Collider2D other)
         {
             EnterredTrigger?.Invoke(other);
+        }
+
+        void OnTriggerExit2D(Collider2D other)
+        {
+            ExitedTrigger?.Invoke(other);
         }
     }
 }
