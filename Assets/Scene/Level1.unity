@@ -2611,6 +2611,7 @@ GameObject:
   - component: {fileID: 1838464533}
   - component: {fileID: 1838464534}
   - component: {fileID: 1838464535}
+  - component: {fileID: 1838464536}
   m_Layer: 0
   m_Name: ParalaxBackground
   m_TagString: Untagged
@@ -2641,7 +2642,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1838464532}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52b3b242a3b1427448a8bef3711ae036, type: 3}
   m_Name: 
@@ -2663,6 +2664,22 @@ MonoBehaviour:
   _camera: {fileID: 2029539620}
   _background: {fileID: 1819434344}
   _backgroundCopy: {fileID: 1536546390}
+  _scrollingSpeed: 6
+--- !u!114 &1838464536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1838464532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06bf895520bdf1d489265df62f83bc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 2029539620}
+  _background: {fileID: 166921267}
+  _backgroundCopy: {fileID: 850920726}
+  _scrollingSpeed: 1
 --- !u!1 &1878666503
 GameObject:
   m_ObjectHideFlags: 0

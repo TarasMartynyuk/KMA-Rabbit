@@ -26,7 +26,7 @@ namespace Background
             _pastFramePos = freeObject.transform.position;
         }
 
-        public void Update()
+        public void LateUpdate()
         {
             var currPos = _freeObject.transform.position;
             var displacement = currPos - _pastFramePos;

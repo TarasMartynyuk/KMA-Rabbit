@@ -34,7 +34,7 @@ public class GameObjectMovementDependencyTests
         var startPos = _dependentGo.transform.position;
 
         EmulateUpdate(() => {
-            movementDep.Update();
+            movementDep.LateUpdate();
         }, 10);
 
         _dependentGo.transform.position.Should().Be(startPos);
@@ -49,14 +49,16 @@ public class GameObjectMovementDependencyTests
         var freeStartPos = _freeGo.transform.position;
         var depStartPos = _dependentGo.transform.position;
 
-        EmulateUpdate(() => {
-            movementDep.Update();
+        EmulateUpdate(() => 
+        {
+            _freeGo.transform.Translate(Vector3.right * 10f);
+            movementDep.LateUpdate();
         }, 10);
 
-        var freePassedDist = _freeGo.transform.position - freeStartPos;
-        var depPassedDist = _dependentGo.transform.position - depStartPos;
+        float freePassedDist = (_freeGo.transform.position - freeStartPos).magnitude;
+        float depPassedDist = (_dependentGo.transform.position - depStartPos).magnitude;
 
-        depPassedDist.Should().Be(freeStartPos * ratio);
+        depPassedDist.Should().Be(freePassedDist * ratio);
     }
 
 

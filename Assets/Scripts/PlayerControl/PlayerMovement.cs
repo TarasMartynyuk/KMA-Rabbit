@@ -53,7 +53,7 @@ namespace PlayerControl
         }
 
 
-        // Update is called once per frame
+        // LateUpdate is called once per frame
         public void FixedUpdate()
         {
             _rb.velocity = new Vector2(_move * _speed, _rb.velocity.y);
