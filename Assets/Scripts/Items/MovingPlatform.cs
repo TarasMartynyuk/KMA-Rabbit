@@ -1,19 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour 
 {
+    [SerializeField]
+    Transform _pointB;
+    [SerializeField]
+    float _speed;
+    [SerializeField]
+    float _pause;
 
-	// Use this for initialization
-	void Start () 
+    PendulumMovement _pendulumMovement;
+
+	void Awake() 
 	{
-		
+		_pendulumMovement = new PendulumMovement(transform, _pointB.position, _speed, _pause);
 	}
 	
-	// Update is called once per frame
 	void Update () 
 	{
-		
+		_pendulumMovement.Update();
 	}
 }

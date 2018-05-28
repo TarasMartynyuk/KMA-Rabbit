@@ -11,10 +11,10 @@ public class PendulumMovement
 
     readonly float _speed;
     readonly float _pause;
+    float _pauseTimer;
+    bool _paused;
     
     Vector3 _target;
-    // normalized
-    //Vector3 _targetDirection;
     
     public PendulumMovement(Transform movingTransform, Vector3 pointB, float speed, float pause)
     {
@@ -27,14 +27,29 @@ public class PendulumMovement
         _pause = pause;
 
         _target = _pointB;
-        //_targetDirection = Direction(_movingTransform.position, _target);
+
+        ResetPauseTimer();
     }
 
     public void Update()
     {
-        if(MoveTowardsTarget())
+        Collider2D col;
+
+        if(_paused)
+        {
+            _pauseTimer -= Time.deltaTime;
+            if(_pauseTimer <= 0f)
+            {
+                _paused = false;
+            }
+            return;
+        }
+
+        if(MoveTowardsTarget(Time.deltaTime))
         {
             SwapTarget();
+            _paused = true;
+            ResetPauseTimer();
         }
     }
 
@@ -45,7 +60,7 @@ public class PendulumMovement
             _pointB : _pointA;
     }
 
-    bool MoveTowardsTarget()
+    bool MoveTowardsTarget(float deltaTime)
     {
         //var displacement = _targetDirection * _speed;
 
@@ -57,7 +72,9 @@ public class PendulumMovement
 
         //_movingTransform.Translate(displacement);
         //return false;
-        _movingTransform.position = Vector3.MoveTowards(_movingTransform.position, _target, _speed);
+        _movingTransform.position = Vector3.MoveTowards(_movingTransform.position, _target, _speed * deltaTime);
         return ApproximatelyEqual(_movingTransform.position, _target, .1f);
     }
+
+    void ResetPauseTimer()  { _pauseTimer = _pause;  }
 }

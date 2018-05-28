@@ -19,17 +19,10 @@ namespace Game_Flow
 
         static DeathZoneController instance;
 
-        protected override void Awake()
-        {
-            base.Awake();
-
-            var collisionListener = _rabbit.gameObject.AddComponent<Trigger2DListener>();
-            collisionListener.EnterredTrigger += OnRabbitEnterredCollision;
-        }
-
         void Start()
         {
-
+            var collisionListener = _rabbit.gameObject.AddComponent<Trigger2DListener>();
+            collisionListener.EnterredTrigger += OnRabbitEnterredCollision;
         }
 
         void OnRabbitEnterredCollision(Collider2D collision)
