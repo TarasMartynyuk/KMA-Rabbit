@@ -20,7 +20,8 @@ namespace Actors
         #region delegating livescomponent
         public bool LoseLife()
         {
-            //if(_livesComponent.LoseLife())
+            //bool died = _livesComponent.LoseLife();
+            //if (died &&)
             //{
             //    // if grounded play death anim
             //}

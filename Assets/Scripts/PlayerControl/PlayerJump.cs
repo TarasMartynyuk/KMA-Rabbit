@@ -100,7 +100,6 @@ namespace PlayerControl
         {
             var coll = Physics2D.OverlapCircle(_groundCheck.position, GroundCheckRadius, _whatIsGround);
 
-            if (coll != null)  Debug.Log($"hit {coll.gameObject.name}, istrigger: {coll.isTrigger}");
             // ignoring collisions with the jumping object itself
             return coll != null && coll.attachedRigidbody != _rb;
         }
