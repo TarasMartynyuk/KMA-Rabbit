@@ -8,21 +8,21 @@ namespace Background
         const float BgChangeTolerance = 0f;
 
         readonly CameraWorldWrapper _cameraWorldWrapper;
-        readonly SpriteInWorldMover _bgMover;
-        readonly SpriteInWorldMover _copyBgMover;
+        readonly SpriteMover _bgMover;
+        readonly SpriteMover _copyBgMover;
 
-        public HorizontalTilingBackground(Camera camera, SpriteRenderer sprite, SpriteRenderer spriteCopy)
+        public HorizontalTilingBackground(Camera camera, SpriteMover spriteMover, SpriteMover spriteCopyMover)
         {
-            if(! BackgroundsDimsEqual(sprite, spriteCopy))
-            { throw new ArgumentException("backgrounds must have equal sizes"); }
+            if(! SpriteMoverDimsEqual(spriteMover, spriteCopyMover))
+                { throw new ArgumentException("backgrounds must have equal sizes"); }
 
             _cameraWorldWrapper = new CameraWorldWrapper(camera);
 
-            if(! BackgroundLargerThanScreen(sprite, _cameraWorldWrapper)) 
-            { throw new ArgumentException("background must be larger than screen (in world units)"); }
+            if(! BackgroundLargerThanScreen(spriteMover, _cameraWorldWrapper)) 
+                { throw new ArgumentException("background must be larger than screen (in world units)"); }
 
-            _bgMover = new SpriteInWorldMover(sprite, sprite.gameObject);
-            _copyBgMover = new SpriteInWorldMover(spriteCopy, spriteCopy.gameObject);
+            _bgMover = spriteMover;
+            _copyBgMover = spriteCopyMover;
 
             // place the one copy of bg at the center of the camera, the other tiled to the left
             _bgMover.MoveCenter(_cameraWorldWrapper.Position);
@@ -41,7 +41,6 @@ namespace Background
                 _bgMover : _copyBgMover;
 
             var otherBg = GetOtherBackground(currentlyShownBg);
-
 
             //Debug.Log($"BG LB: {currentlyShownBg.LeftBound}, CAM LB: {_cameraWorldWrapper.LeftBound}," + 
             //          $" OUT? : {CameraOutOfLeftBound(currentlyShownBg)}");
@@ -64,7 +63,7 @@ namespace Background
         /// is at the <paramref name="staticSprite"/>'s top right corner, 
         /// making a seemless connection
         /// </summary>
-        static void TileSpriteToTheRight(SpriteInWorldMover staticSprite, SpriteInWorldMover movingSprite)
+        static void TileSpriteToTheRight(SpriteMover staticSprite, SpriteMover movingSprite)
         {
             movingSprite.MoveTopLeftCorner(staticSprite.TopRight);
         }
@@ -75,38 +74,38 @@ namespace Background
         /// is at the <paramref name="staticSprite"/>'s top left corner, 
         /// making a seemless connection
         /// </summary>
-        static void TileSpriteToTheLeft(SpriteInWorldMover staticSprite, SpriteInWorldMover movingSprite)
+        static void TileSpriteToTheLeft(SpriteMover staticSprite, SpriteMover movingSprite)
         {
             movingSprite.MoveTopRightCorner(staticSprite.TopLeft);
         }
 
-        bool CameraOutOfRightBound(SpriteInWorldMover sprite)
+        bool CameraOutOfRightBound(SpriteMover sprite)
         {
             return _cameraWorldWrapper.RightBound + BgChangeTolerance >= sprite.RightBound;
         }
 
-        bool CameraOutOfLeftBound(SpriteInWorldMover sprite)
+        bool CameraOutOfLeftBound(SpriteMover sprite)
         {
             return _cameraWorldWrapper.LeftBound - BgChangeTolerance <= sprite.LeftBound;
         }
 
-        SpriteInWorldMover GetOtherBackground(SpriteInWorldMover thisSprite)
+        SpriteMover GetOtherBackground(SpriteMover thisSprite)
         {
             return thisSprite == _bgMover ?
                 _copyBgMover : _bgMover;
         }
 
         #region validation
-        static bool BackgroundsDimsEqual(SpriteRenderer bg, SpriteRenderer otherBg)
+        static bool SpriteMoverDimsEqual(SpriteMover mover, SpriteMover otherMover)
         {
-            return bg.bounds.size == otherBg.bounds.size;
+            return Math.Abs(
+                (mover.Dimentions - otherMover.Dimentions).magnitude) <0.02;
         }
 
-        static bool BackgroundLargerThanScreen(SpriteRenderer bg, CameraWorldWrapper camera)
+        static bool BackgroundLargerThanScreen(SpriteMover mover, CameraWorldWrapper camera)
         {
-            var cameraArea =  camera.GetScreenDimsInWorldCoords().magnitude;
-            var backgroundDims = bg.bounds.size;
-            backgroundDims.z = 0;
+            float cameraArea =  camera.GetScreenDimsInWorldCoords().magnitude;
+            var backgroundDims = mover.Dimentions;
 
             return backgroundDims.magnitude > cameraArea;
         }

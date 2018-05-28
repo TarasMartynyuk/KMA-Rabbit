@@ -1,10 +1,15 @@
 ﻿using System;
+using Background.MonoBehaviours;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Background
 {
-    public class SpriteInWorldMover
+    /// <summary>
+    /// more convenient api for moving sprite in world coords
+    /// sprite can be a single sprite gameobject, or a prefab with CompositeSprite component
+    /// </summary>
+    public class SpriteMover
     {
         #region bounds props
         // actually this props exist just for readability
@@ -21,6 +26,7 @@ namespace Background
         public float HorizExtent => _spriteRenderer.bounds.extents.x;
         public float VertExtent => _spriteRenderer.bounds.extents.y;
 
+        public Vector2 Dimentions => _spriteRenderer.bounds.size;
         public Vector2 Center => _spriteRenderer.bounds.center;
         #endregion
 
@@ -33,16 +39,24 @@ namespace Background
         /// </summary>
         readonly GameObject _spriteParent;
 
-        public SpriteInWorldMover(SpriteRenderer spriteRenderer, GameObject spriteParent)
+        #region ctors
+        public SpriteMover(SpriteRenderer spriteRenderer)
         {
-            if(spriteParent.transform.position != spriteRenderer.bounds.center)
-            {
-                throw new ArgumentException($"{nameof(spriteParent)} " + 
-                                            $"must be positioned in the center of {nameof(spriteRenderer)}");
-            }
             _spriteRenderer = spriteRenderer;
-            _spriteParent = spriteParent;
+            _spriteParent = _spriteRenderer.gameObject;
         }
+
+        public SpriteMover(CompositeSprite compositeSprite)
+        {
+            if(compositeSprite.transform.position != compositeSprite.BoundingSprite.bounds.center)
+            {
+                throw new ArgumentException($"{nameof(compositeSprite)} " + 
+                                            $"must be positioned in the center of {nameof(compositeSprite.BoundingSprite)}");
+            }
+            _spriteRenderer = compositeSprite.BoundingSprite;
+            _spriteParent = compositeSprite.gameObject;
+        }
+        #endregion
 
         /// <summary>
         /// moves the sprite so that it's top left corner has the <paramref name="coords"/> coordinates
