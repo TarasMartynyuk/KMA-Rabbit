@@ -18,5 +18,15 @@ namespace Utils
                 left.x + right,
                 left.y + right);
         }
+
+        public static Vector3 Direction(Vector3 point, Vector3 target)
+        {
+            return (target - point).normalized;
+        }
+
+        public static bool ApproximatelyEqual(Vector3 vec, Vector3 otherVec, float tolerance)
+        {
+            return Vector3.Distance(vec, otherVec) < tolerance;
+        }
     }
 }

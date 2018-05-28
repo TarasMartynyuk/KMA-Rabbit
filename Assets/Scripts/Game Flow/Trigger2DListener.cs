@@ -9,15 +9,14 @@ namespace Game_Flow
     /// </summary>
     /// <remarks>
     /// this way, any other C# class can subscribe and handle collisions of this gameobject
-    /// the cached members of the class are hardcoded for my particular case
     /// </remarks>
     public class Trigger2DListener : MonoBehaviour 
     {
-        public event Action<Collider2D> OnEnteredCollision;
+        public event Action<Collider2D> EnterredTrigger;
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            OnEnteredCollision?.Invoke(other);
+            EnterredTrigger?.Invoke(other);
         }
     }
 }

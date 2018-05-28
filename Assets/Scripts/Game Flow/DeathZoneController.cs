@@ -24,7 +24,7 @@ namespace Game_Flow
             base.Awake();
 
             var collisionListener = _rabbit.gameObject.AddComponent<Trigger2DListener>();
-            collisionListener.OnEnteredCollision += OnRabbitEnterredCollision;
+            collisionListener.EnterredTrigger += OnRabbitEnterredCollision;
         }
 
         void Start()

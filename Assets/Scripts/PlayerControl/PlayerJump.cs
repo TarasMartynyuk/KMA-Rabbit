@@ -91,6 +91,11 @@ namespace PlayerControl
             ResetJumpCounter();
         }
 
+        void FallDown()
+        {
+
+        }
+
         bool CheckIfOnGround()
         {
             var coll = Physics2D.OverlapCircle(_groundCheck.position, GroundCheckRadius, _whatIsGround);
