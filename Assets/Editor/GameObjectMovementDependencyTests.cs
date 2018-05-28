@@ -1,4 +1,5 @@
 ﻿using System;
+using Background;
 using FluentAssertions;
 using NUnit.Framework;
 using UnityEngine;

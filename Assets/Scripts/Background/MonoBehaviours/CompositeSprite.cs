@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MonoBehaviours
+namespace Background.MonoBehaviours
 {
     /// <summary>
     /// script for the parent of multiple sprite gameobjects, grouped and aligned to create a composite sprite

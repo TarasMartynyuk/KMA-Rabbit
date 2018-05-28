@@ -1,4 +1,4 @@
-﻿namespace MonoBehaviours
+﻿namespace Background.MonoBehaviours
 {
     class StaticHorizontalTilingBackground : HorizontalTilingBackgroundEditorData
     {

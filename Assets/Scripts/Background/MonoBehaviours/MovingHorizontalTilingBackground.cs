@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace MonoBehaviours
+﻿namespace Background.MonoBehaviours
 {
     public class MovingHorizontalTilingBackground : HorizontalTilingBackgroundEditorData
     {

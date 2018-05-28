@@ -1,8 +1,7 @@
-﻿using MonoBehaviours;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace MonoBehaviours
+namespace Background.MonoBehaviours
 {
     public abstract class HorizontalTilingBackgroundEditorData : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Utils;
 
-namespace MonoBehaviours
+namespace Background.MonoBehaviours
 {
     public class CameraFollow : MonoBehaviour 
     {
