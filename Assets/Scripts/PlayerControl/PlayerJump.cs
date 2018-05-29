@@ -14,6 +14,7 @@ namespace PlayerControl
         readonly LayerMask _whatIsGround;
         readonly Rigidbody2D _rb;
         readonly Animator _anim;
+
         /// <summary>
         /// after _jumpTime seconds has elapsed since the jump start,
         /// user's input (if he holds the jump button) is not count to prolong the jump
@@ -91,17 +92,13 @@ namespace PlayerControl
             ResetJumpCounter();
         }
 
-        void FallDown()
-        {
-
-        }
-
         bool CheckIfOnGround()
         {
             var coll = Physics2D.OverlapCircle(_groundCheck.position, GroundCheckRadius, _whatIsGround);
 
-            // ignoring collisions with the jumping object itself
-            return coll != null && coll.attachedRigidbody != _rb;
+            Assert.IsTrue(coll != null && coll.attachedRigidbody != _rb);
+
+            return coll != null;
         }
     }
 }
