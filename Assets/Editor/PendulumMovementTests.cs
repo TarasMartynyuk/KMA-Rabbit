@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using InanimateObjects.Environment;
 using NUnit.Framework;
 using UnityEngine;
 
