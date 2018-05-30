@@ -1,5 +1,5 @@
 # KMA-Rabbit
-It has classic moving platforms, mario-style jump and collectable coins + fruits. 
+It has (will have) classic moving platforms, mario-style jump and collectable coins + fruits. 
 And, somehow, orcs - that's free art assets for you!
 
 Made for my university unity3d course.
