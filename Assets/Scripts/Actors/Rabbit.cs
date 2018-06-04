@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using InanimateObjects.Collectables;
+using UnityEngine;
 
 namespace Actors
 {
@@ -10,11 +11,13 @@ namespace Actors
         public int Lives => _livesComponent.Lives;
 
         LivesComponent _livesComponent;
+        RabbitStats _stats;
         Animator _anim;
 
         void Awake()
         {
             _livesComponent = new LivesComponent(_startingLives);
+            _stats = new RabbitStats(this);
         }
 
         #region delegating livescomponent
@@ -33,5 +36,10 @@ namespace Actors
             _livesComponent.ResetLives();
         }
         #endregion
+
+        void Update()
+        {
+            _stats.Update(Time.deltaTime);
+        }
     }
 }

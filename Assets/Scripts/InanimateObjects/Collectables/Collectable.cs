@@ -7,13 +7,14 @@ namespace InanimateObjects.Collectables
     /// </summary>
     class Collectable : MonoBehaviour
     {
+        public CollectableType Type => _type;
 
-        CollectableType Type { get; }
-
+        [SerializeField]
+        CollectableType _type;
     }
 
     enum CollectableType
     {
-        Fruit, Bomb
+        Bomb, Mushroom, Fruit, Diamond
     }
 }
