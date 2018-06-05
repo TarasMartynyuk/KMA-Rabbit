@@ -28,7 +28,9 @@ namespace InanimateObjects.Collectables
         readonly PlayerMovement _playerMovement;
         readonly Respawner _respawner;
         readonly Animator _anim;
+
         readonly int _dieAnimHash;
+        readonly float _rabbitColliderVertExtent;
 
         double _enlargementTimer;
 
@@ -46,6 +48,13 @@ namespace InanimateObjects.Collectables
             _anim = anim;
 
             _dieAnimHash = Animator.StringToHash("Die");
+
+            var coll = _rabbit.GetComponent<Collider2D>();
+
+            if (coll == null)
+                { throw new MissingComponentException($"{nameof(rabbit)} must have a Collider2D attached"); }
+
+            _rabbitColliderVertExtent = coll.bounds.extents.y;
         }
 
         /// <summary>
@@ -113,6 +122,11 @@ namespace InanimateObjects.Collectables
         {
             Assert.IsFalse(Enlarged);
             Assert.AreApproximatelyEqual(Math.Abs(_rabbit.transform.localScale.x), 1f, 0.1f);
+            Assert.AreApproximatelyEqual(
+                _rabbit.GetComponent<Collider2D>().bounds.extents.y,
+                _rabbitColliderVertExtent, 0.1f);
+
+            _rabbit.gameObject.transform.Translate(Vector3.up * _rabbitColliderVertExtent);
 
             _rabbit.gameObject.transform.localScale = _rabbit.gameObject.transform.localScale * EnlargmentFactor;
             _enlargementTimer = TimeEnlarged;
