@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 
 [TestFixture]
-public class PendulumMovementTests : MonoBehaviour
+public class PendulumMovementTests
 {
     Transform _movingTransform;
     readonly Vector3 _pointA = Vector3.zero;

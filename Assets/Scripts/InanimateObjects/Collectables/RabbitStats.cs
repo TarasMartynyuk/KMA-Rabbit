@@ -2,6 +2,7 @@
 using Actors;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Object = UnityEngine.Object;
 
 namespace InanimateObjects.Collectables
 {
@@ -13,9 +14,9 @@ namespace InanimateObjects.Collectables
     {
         public bool Enlarged { get; private set; }
         public int FruitsCollected { get; private set; }
-        public int DiamondsCollected { get; private set; }
+        public int GemsCollected { get; private set; }
 
-        const float EnlargmentScale = 2f;
+        const float EnlargmentScale =1.6f;
         const double TimeEnlarged = 4f;
 
         double _enlargementTimer;
@@ -64,22 +65,27 @@ namespace InanimateObjects.Collectables
                     FruitsCollected++;
                     break;
 
-                case CollectableType.Diamond:
+                case CollectableType.Gem:
 
-                    DiamondsCollected++;
+                    GemsCollected++;
                     break;
 
                 default:
                     throw new Exception("unknown Collectable type");
             }
+
+            Object.Destroy(gameObject);
             return true;
         }
 
         public void Update(double deltaTime)
         {
-            _enlargementTimer -= deltaTime;
-            if(_enlargementTimer <= 0)
-                { StopRabbitsEnlargement(); }
+            if(Enlarged)
+            {
+                _enlargementTimer -= deltaTime;
+                if(_enlargementTimer <= 0)
+                    { StopRabbitsEnlargement(); }
+            }
         }
 
         void EnlargeRabbit()

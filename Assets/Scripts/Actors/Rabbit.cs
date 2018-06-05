@@ -14,11 +14,24 @@ namespace Actors
         RabbitStats _stats;
         Animator _anim;
 
+        #region monobehaviour
         void Awake()
         {
             _livesComponent = new LivesComponent(_startingLives);
             _stats = new RabbitStats(this);
         }
+
+        void Update()
+        {
+            _stats.Update(Time.deltaTime);
+        }
+
+        void OnTriggerEnter2D(Collider2D otherCollider)
+        {
+            if(_stats.TryPickup(otherCollider.gameObject))
+                { return; }
+        }
+        #endregion monobehaviour
 
         #region delegating livescomponent
         public bool LoseLife()
@@ -37,9 +50,5 @@ namespace Actors
         }
         #endregion
 
-        void Update()
-        {
-            _stats.Update(Time.deltaTime);
-        }
     }
 }

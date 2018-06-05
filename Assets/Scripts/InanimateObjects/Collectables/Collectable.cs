@@ -15,6 +15,6 @@ namespace InanimateObjects.Collectables
 
     enum CollectableType
     {
-        Bomb, Mushroom, Fruit, Diamond
+        Bomb, Mushroom, Fruit, Gem
     }
 }

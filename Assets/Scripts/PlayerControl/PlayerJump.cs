@@ -96,8 +96,7 @@ namespace PlayerControl
         {
             var coll = Physics2D.OverlapCircle(_groundCheck.position, GroundCheckRadius, _whatIsGround);
 
-            Assert.IsTrue(coll != null && coll.attachedRigidbody != _rb);
-
+            Assert.IsTrue(coll == null || coll.attachedRigidbody != _rb);
             return coll != null;
         }
     }
