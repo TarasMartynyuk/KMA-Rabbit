@@ -1,24 +1,34 @@
 ﻿using InanimateObjects.Collectables;
+using PlayerControl;
 using UnityEngine;
 
 namespace Actors
 {
     public class Rabbit : MonoBehaviour 
     {
+        public LivesComponent Lives {get; private set;}
+
         [SerializeField] 
         int _startingLives;
 
-        public int Lives => _livesComponent.Lives;
-
-        LivesComponent _livesComponent;
         RabbitStats _stats;
         Animator _anim;
 
         #region monobehaviour
         void Awake()
         {
-            _livesComponent = new LivesComponent(_startingLives);
-            _stats = new RabbitStats(this);
+            Lives = new LivesComponent(_startingLives);
+        }
+
+        void Start()
+        {
+            var playerController = GetComponent<PlayerController>();
+
+            if(playerController == null)
+            { throw new MissingComponentException(
+                "the Rabbit monobehaviour requires that it's parent gameobject has a PlayerController component");  }
+
+            _stats = new RabbitStats(this, playerController.PlayerMovement);
         }
 
         void Update()
@@ -32,23 +42,6 @@ namespace Actors
                 { return; }
         }
         #endregion monobehaviour
-
-        #region delegating livescomponent
-        public bool LoseLife()
-        {
-            //bool died = _livesComponent.LoseLife();
-            //if (died &&)
-            //{
-            //    // if grounded play death anim
-            //}
-            return _livesComponent.LoseLife();
-        }
-
-        public void ResetLives()
-        {
-            _livesComponent.ResetLives();
-        }
-        #endregion
 
     }
 }

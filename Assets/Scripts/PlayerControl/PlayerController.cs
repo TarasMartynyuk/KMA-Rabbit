@@ -4,6 +4,8 @@ namespace PlayerControl
 {
     public class PlayerController : MonoBehaviour 
     {
+        public PlayerMovement PlayerMovement { get; private set; }
+
         // per second
         [SerializeField] 
         float _speed;
@@ -17,8 +19,6 @@ namespace PlayerControl
         [SerializeField]
         float _jumpForceMagnitude;
 
-
-        PlayerMovement _playerMovement;
         PlayerJump _playerJump;
 
         #region Unity methods
@@ -44,7 +44,7 @@ namespace PlayerControl
             var rb = GetComponent<Rigidbody2D>();
             var anim = GetComponent<Animator>();
 
-            _playerMovement = new PlayerMovement(rb, transform, _speed, anim);
+            PlayerMovement = new PlayerMovement(rb, transform, _speed, anim);
             _playerJump = new PlayerJump(
                 rb, _groundCheck, _whatIsGround, 
                 _jumpForceMagnitude, _jumpTime, anim);
@@ -52,13 +52,13 @@ namespace PlayerControl
 
         void UpdateComponents()
         {
-            _playerMovement.Update();
+            PlayerMovement.Update();
             _playerJump.Update();
         }
 
         void FixUpdateComponents()
         {
-            _playerMovement.FixedUpdate();
+            PlayerMovement.FixedUpdate();
             _playerJump.FixedUpdate();
         }
         #endregion

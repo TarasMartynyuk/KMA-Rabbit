@@ -18,18 +18,21 @@ namespace Game_Flow
         Transform _respawnPoint;
 
         static DeathZoneController instance;
+        LivesComponent _rabbitLives;
 
         void Start()
         {
             var collisionListener = _rabbit.gameObject.AddComponent<Trigger2DListener>();
             collisionListener.EnterredTrigger += OnRabbitEnterredCollision;
+
+            _rabbitLives = _rabbit.Lives;
         }
 
         void OnRabbitEnterredCollision(Collider2D collision)
         {
             if(Array.IndexOf(_deathzones, collision.gameObject) >= 0)
             {
-                if(_rabbit.LoseLife()) 
+                if(_rabbitLives.LoseLife()) 
                 { RespawnRabbit(); }
             }
         }
@@ -37,7 +40,7 @@ namespace Game_Flow
         void RespawnRabbit()
         {
             _rabbit.transform.position = _respawnPoint.transform.position;
-            _rabbit.ResetLives();
+            _rabbitLives.ResetLives();
         }
     }
 }

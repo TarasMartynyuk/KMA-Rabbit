@@ -1,5 +1,6 @@
 ﻿using System;
 using Actors;
+using PlayerControl;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
@@ -16,19 +17,21 @@ namespace InanimateObjects.Collectables
         public int FruitsCollected { get; private set; }
         public int GemsCollected { get; private set; }
 
-        const float EnlargmentScale =1.6f;
+        const float EnlargmentFactor = 1.6f;
         const double TimeEnlarged = 4f;
 
         double _enlargementTimer;
         readonly Rabbit _rabbit;
+        readonly PlayerMovement _playerMovement;
 
         /// <summary>
         /// rabbit ref needed to handle damage on bomb pickup
         /// </summary>
         /// <param name="rabbit"></param>
-        public RabbitStats(Rabbit rabbit)
+        public RabbitStats(Rabbit rabbit, PlayerMovement playerMovement)
         {
             _rabbit = rabbit;
+            _playerMovement = playerMovement;
         }
 
         /// <summary>
@@ -49,7 +52,12 @@ namespace InanimateObjects.Collectables
                     if(Enlarged) 
                         { StopRabbitsEnlargement(); }
                     else
-                        { _rabbit.LoseLife(); }
+                    {
+                        if(_rabbit.Lives.LoseLife())
+                        {
+
+                        }
+                    }
                     break;
 
                 case CollectableType.Mushroom:
@@ -91,7 +99,7 @@ namespace InanimateObjects.Collectables
         void EnlargeRabbit()
         {
             Assert.IsFalse(Enlarged);
-            _rabbit.gameObject.transform.localScale = Vector3.one * EnlargmentScale;
+            _rabbit.gameObject.transform.localScale = Vector3.one * EnlargmentFactor;
             _enlargementTimer = TimeEnlarged;
             Enlarged = true;
         }
@@ -99,7 +107,12 @@ namespace InanimateObjects.Collectables
         void StopRabbitsEnlargement()
         {
             Assert.IsTrue(Enlarged);
-            _rabbit.gameObject.transform.localScale = Vector3.one;
+            Assert.AreApproximatelyEqual(Math.Abs(_rabbit.transform.localScale.x), EnlargmentFactor, .1f);
+
+            _rabbit.transform.localScale = new Vector3(
+                _playerMovement.FacingRight? 1f : -1f,
+                1f,
+                1f);
             Enlarged = false;
         }
     }

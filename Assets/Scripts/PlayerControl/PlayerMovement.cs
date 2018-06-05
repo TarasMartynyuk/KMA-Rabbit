@@ -21,6 +21,8 @@ namespace PlayerControl
     /// </remarks>
     public class PlayerMovement
     {
+        public bool FacingRight { get; private set; } = true;
+
         readonly float _speed;
 
         readonly Rigidbody2D _rb;
@@ -28,7 +30,6 @@ namespace PlayerControl
         readonly Animator _anim;
 
         readonly int _runningParamId;
-        bool _facingRight = true;
         float _move;
 
         public PlayerMovement(Rigidbody2D rb, Transform transform, 
@@ -58,14 +59,14 @@ namespace PlayerControl
         {
             _rb.velocity = new Vector2(_move * _speed, _rb.velocity.y);
 
-            if (_facingRight && _move < 0 ||
-                ! _facingRight && _move > 0)
+            if (FacingRight && _move < 0 ||
+                ! FacingRight && _move > 0)
             { Turn(); }
         }
 
         void Turn()
         {
-            _facingRight = ! _facingRight;
+            FacingRight = ! FacingRight;
 
             var oldScale = _transform.localScale;
             oldScale.x *= -1;
