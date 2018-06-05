@@ -1,6 +1,8 @@
-﻿using InanimateObjects.Collectables;
+﻿using GameFlow;
+using InanimateObjects.Collectables;
 using PlayerControl;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Actors
 {
@@ -10,9 +12,10 @@ namespace Actors
 
         [SerializeField] 
         int _startingLives;
+        [SerializeField] 
+        Respawner _respawner;
 
         RabbitStats _stats;
-        Animator _anim;
 
         #region monobehaviour
         void Awake()
@@ -28,7 +31,10 @@ namespace Actors
             { throw new MissingComponentException(
                 "the Rabbit monobehaviour requires that it's parent gameobject has a PlayerController component");  }
 
-            _stats = new RabbitStats(this, playerController.PlayerMovement);
+            var anim = GetComponent<Animator>();
+            Assert.IsNotNull(anim);
+
+            _stats = new RabbitStats(this, playerController.PlayerMovement, _respawner, anim);
         }
 
         void Update()

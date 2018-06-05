@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Actors;
+using GameFlow;
 using PlayerControl;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Object = UnityEngine.Object;
+using Utils;
 
 namespace InanimateObjects.Collectables
 {
@@ -20,18 +24,28 @@ namespace InanimateObjects.Collectables
         const float EnlargmentFactor = 1.6f;
         const double TimeEnlarged = 4f;
 
-        double _enlargementTimer;
         readonly Rabbit _rabbit;
         readonly PlayerMovement _playerMovement;
+        readonly Respawner _respawner;
+        readonly Animator _anim;
+        readonly int _dieAnimHash;
+
+        double _enlargementTimer;
+
 
         /// <summary>
         /// rabbit ref needed to handle damage on bomb pickup
         /// </summary>
         /// <param name="rabbit"></param>
-        public RabbitStats(Rabbit rabbit, PlayerMovement playerMovement)
+        public RabbitStats(Rabbit rabbit, PlayerMovement playerMovement, 
+            Respawner respawner, Animator anim)
         {
             _rabbit = rabbit;
             _playerMovement = playerMovement;
+            _respawner = respawner;
+            _anim = anim;
+
+            _dieAnimHash = Animator.StringToHash("Die");
         }
 
         /// <summary>
@@ -54,9 +68,8 @@ namespace InanimateObjects.Collectables
                     else
                     {
                         if(_rabbit.Lives.LoseLife())
-                        {
-
-                        }
+                        { CoroutineStarter.Instance.StartCoroutine(
+                            PlayDeathAnimAndRespawnRabbitCoroutine()); }
                     }
                     break;
 
@@ -99,7 +112,9 @@ namespace InanimateObjects.Collectables
         void EnlargeRabbit()
         {
             Assert.IsFalse(Enlarged);
-            _rabbit.gameObject.transform.localScale = Vector3.one * EnlargmentFactor;
+            Assert.AreApproximatelyEqual(Math.Abs(_rabbit.transform.localScale.x), 1f, 0.1f);
+
+            _rabbit.gameObject.transform.localScale = _rabbit.gameObject.transform.localScale * EnlargmentFactor;
             _enlargementTimer = TimeEnlarged;
             Enlarged = true;
         }
@@ -114,6 +129,20 @@ namespace InanimateObjects.Collectables
                 1f,
                 1f);
             Enlarged = false;
+        }
+
+        IEnumerator PlayDeathAnimAndRespawnRabbitCoroutine()
+        {
+            _anim.Play(_dieAnimHash);
+            // wait for changes in animator made during this frame
+            yield return new WaitForEndOfFrame();
+
+            Assert.AreEqual(_anim.GetCurrentAnimatorClipInfo(0)[0].clip.name, "Die");
+            float animLength = _anim.GetCurrentAnimatorClipInfo(0)[0].clip.length;
+
+            yield return new WaitForSeconds(animLength);
+
+            _respawner.RespawnRabbit();
         }
     }
 }

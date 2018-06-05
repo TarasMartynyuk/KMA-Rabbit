@@ -3,7 +3,7 @@ using Actors;
 using UnityEngine;
 using Utils;
 
-namespace Game_Flow
+namespace GameFlow
 {
     /// <summary>
     /// Handles the inflicting of damage when rabbit contacs deathzones
@@ -15,7 +15,7 @@ namespace Game_Flow
         [SerializeField]
         GameObject[] _deathzones;
         [SerializeField]
-        Transform _respawnPoint;
+        Respawner _respawner;
 
         static DeathZoneController instance;
         LivesComponent _rabbitLives;
@@ -33,14 +33,10 @@ namespace Game_Flow
             if(Array.IndexOf(_deathzones, collision.gameObject) >= 0)
             {
                 if(_rabbitLives.LoseLife()) 
-                { RespawnRabbit(); }
+                    { _respawner.RespawnRabbit(); }
             }
         }
 
-        void RespawnRabbit()
-        {
-            _rabbit.transform.position = _respawnPoint.transform.position;
-            _rabbitLives.ResetLives();
-        }
+
     }
 }

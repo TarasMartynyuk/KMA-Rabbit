@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Game_Flow
+namespace GameFlow
 {
     /// <summary>
     /// Listens to the unity collision message on the gameobject it is attached to,

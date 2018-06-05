@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Game_Flow;
+using GameFlow;
 using UnityEngine;
 
 namespace InanimateObjects.Environment
