@@ -39,7 +39,6 @@ namespace InanimateObjects.Environment
             {
                 UnStick(collider.gameObject);
             };
-
         }
 
         void Stick(GameObject gameObject)
@@ -58,6 +57,5 @@ namespace InanimateObjects.Environment
 
             return colliders != null && colliders.Any(col => col.isTrigger);
         }
-
     }
 }
