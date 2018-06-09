@@ -2,15 +2,14 @@
 using InanimateObjects.Collectables;
 using PlayerControl;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Actors
 {
     public class Rabbit 
     {
-        public LivesComponent Lives {get; }
+        public ILivesComponent Lives {get; }
 
-        RabbitStats _stats;
+        IRabbitStats _stats;
 
         /// <summary>
         /// for initializing from editor
@@ -18,13 +17,12 @@ namespace Actors
         public Rabbit(GameObject rabbitGo, int startingLives, PlayerMovement movement, 
             Respawner respawner, Animator anim)
             : this(new LivesComponent(startingLives), 
-                new RabbitStats(rabbitGo, movement, respawner, anim))
-        {}
+                new RabbitStats(rabbitGo, movement, respawner, anim)) {}
 
         /// <summary>
         /// mock constructor for tests
         /// </summary>
-        public Rabbit(LivesComponent lives, RabbitStats stats)
+        public Rabbit(ILivesComponent lives, IRabbitStats stats)
         {
             Lives = lives;
             _stats = stats;

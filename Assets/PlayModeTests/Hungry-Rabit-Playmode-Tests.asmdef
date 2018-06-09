@@ -1,0 +1,8 @@
+{
+    "name": "Hungry-Rabit-Playmode-Tests",
+    "references": [
+        "KMA-Hungry-Rabbit"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

@@ -18,7 +18,7 @@ namespace GameFlow
         Respawner _respawner;
 
         static DeathZoneController instance;
-        LivesComponent _rabbitLives;
+        ILivesComponent _rabbitLives;
 
         void Start()
         {

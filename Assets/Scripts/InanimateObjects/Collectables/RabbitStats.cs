@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
 using Actors;
 using GameFlow;
 using PlayerControl;
@@ -15,7 +14,7 @@ namespace InanimateObjects.Collectables
     /// handles picking up collectables 
     /// and manages the rabbits state relevant to collectables
     /// </summary>
-    public class RabbitStats
+    public class RabbitStats : IRabbitStats
     {
         public bool Enlarged { get; private set; }
         public int FruitsCollected { get; private set; }
@@ -34,7 +33,6 @@ namespace InanimateObjects.Collectables
         readonly float _rabbitColliderVertExtent;
 
         double _enlargementTimer;
-
 
         /// <summary>
         /// rabbit ref needed to handle damage on bomb pickup

@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 namespace Actors
 {
-    class RabbitMonoBehaviour : MonoBehaviour
+    public class RabbitMonoBehaviour : MonoBehaviour
     {
         public Rabbit Rabbit { get; private set; }
 

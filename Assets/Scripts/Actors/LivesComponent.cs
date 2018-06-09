@@ -3,7 +3,7 @@
     /// <summary>
     /// encapsulates the lives mechanic of actors
     /// </summary>
-    public class LivesComponent
+    public class LivesComponent : ILivesComponent
     {
         public int Lives { get; protected set; }
 

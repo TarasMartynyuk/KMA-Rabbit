@@ -165,12 +165,6 @@ GameObject:
   m_PrefabParentObject: {fileID: 1032488495821586, guid: 774206624f264f44fb0d307b604f3a6b,
     type: 2}
   m_PrefabInternal: {fileID: 1048078865}
---- !u!114 &259092938 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114880880702991692, guid: f1522801abec41f4ea1d81adb1681738,
-    type: 2}
-  m_PrefabInternal: {fileID: 1019251475}
-  m_Script: {fileID: 11500000, guid: eae7810e36bebc644990223f35ae909f, type: 3}
 --- !u!1 &290096651
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06748031e11b6c14d9084add2060b8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rabbit: {fileID: 259092938}
+  _rabbitBehaviour: {fileID: 1455174171}
   _deathzones:
   - {fileID: 570093161}
   _respawner: {fileID: 2146937500}
@@ -662,7 +656,8 @@ Prefab:
       propertyPath: _jumpForceMagnitude
       value: 3.3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114880880702991692, guid: f1522801abec41f4ea1d81adb1681738, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: f1522801abec41f4ea1d81adb1681738, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1037988883
@@ -823,6 +818,24 @@ Transform:
   m_Father: {fileID: 336671348}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1455174170 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1477679886226198, guid: f1522801abec41f4ea1d81adb1681738,
+    type: 2}
+  m_PrefabInternal: {fileID: 1019251475}
+--- !u!114 &1455174171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1455174170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f2b22d5b140edd47bdbff20c17db033, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startingLives: 1
+  _respawner: {fileID: 2146937500}
 --- !u!4 &1535364917 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4841550799507580, guid: 3ecb3060722d49544a594b48fcb139f5,
@@ -1342,7 +1355,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1411,5 +1424,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838dbfc9ec3770446a5cf414e9ccb46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rabbit: {fileID: 259092938}
+  _rabbit: {fileID: 1455174171}
   _respawnPoint: {fileID: 2146937499}
