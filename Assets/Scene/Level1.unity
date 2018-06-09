@@ -452,11 +452,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4650879059578482, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 100.46001
+      value: 2.45
       objectReference: {fileID: 0}
     - target: {fileID: 4650879059578482, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -66.81
+      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 4650879059578482, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
       propertyPath: m_LocalPosition.z
@@ -727,6 +727,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4469771000230756, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469771000230756, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 774206624f264f44fb0d307b604f3a6b, type: 2}
   m_IsPrefabParent: 0
@@ -864,8 +872,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1536546390}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.86, y: 3.14, z: 0}
-  m_LocalScale: {x: 4.2480597, y: 4.2480597, z: 4.2480597}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4.7578115, y: 4.7578115, z: 4.7578115}
   m_Children: []
   m_Father: {fileID: 1838464533}
   m_RootOrder: 2
@@ -1112,8 +1120,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1819434344}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.86, y: 3.14, z: 0}
-  m_LocalScale: {x: 4.24806, y: 4.24806, z: 4.24806}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4.7578125, y: 4.7578125, z: 4.7578125}
   m_Children: []
   m_Father: {fileID: 1838464533}
   m_RootOrder: 3
@@ -1355,7 +1363,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 3.1899486
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

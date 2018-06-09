@@ -14,7 +14,7 @@ namespace Actors
         [SerializeField] 
         Respawner _respawner;
 
-        void Start()
+        void Awake()
         {
             var playerController = GetComponent<PlayerController>();
 
