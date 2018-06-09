@@ -1,12 +1,15 @@
 ﻿using System;
 
-static class TestUtils
+namespace UnityApiDependent
 {
-    public static void EmulateUpdate(Action onUpdate, int times)
+    static class TestUtils
     {
-        for(int i = 0; i < times; i++)
+        public static void EmulateUpdate(Action onUpdate, int times)
         {
-            onUpdate.Invoke();
+            for(int i = 0; i < times; i++)
+            {
+                onUpdate.Invoke();
+            }
         }
     }
 }

@@ -3,101 +3,104 @@ using InanimateObjects.Environment;
 using NUnit.Framework;
 using UnityEngine;
 
-[TestFixture]
-public class PendulumMovementTests
+namespace UnityApiDependent
 {
-    Transform _movingTransform;
-    readonly Vector3 _pointA = Vector3.zero;
-    readonly Vector3 _pointB = new Vector3(5f, 5f, 0f);
-
-    const float Speed = 1f;
-    const float Pause = 1f;
-    //float _dist;
-    int _updatesForOneWayTrip;
-
-
-    [SetUp]
-    public void SetUp()
+    [TestFixture]
+    public class PendulumMovementTests
     {
-        _movingTransform = new GameObject("moving").transform;
-        _movingTransform.position = _pointA;
-        float dist = Vector3.Distance(_pointA, _pointB);
-        _updatesForOneWayTrip = Mathf.CeilToInt(dist / Speed);
-    }
+        Transform _movingTransform;
+        readonly Vector3 _pointA = Vector3.zero;
+        readonly Vector3 _pointB = new Vector3(5f, 5f, 0f);
 
-    [Test]
-    public void Transform_MustReachPointB()
-    {
-        var movement = TestInstance();
+        const float Speed = 1f;
+        const float Pause = 1f;
+        //float _dist;
+        int _updatesForOneWayTrip;
 
-        bool visitedPointB = false;
-        TestUtils.EmulateUpdate(() => 
+
+        [SetUp]
+        public void SetUp()
         {
-            movement.Update();
-            if(Visits(_pointB)) 
-                { visitedPointB = true; }
+            _movingTransform = new GameObject("moving").transform;
+            _movingTransform.position = _pointA;
+            float dist = Vector3.Distance(_pointA, _pointB);
+            _updatesForOneWayTrip = Mathf.CeilToInt(dist / Speed);
+        }
 
-        }, _updatesForOneWayTrip + 1);
+        [Test]
+        public void Transform_MustReachPointB()
+        {
+            var movement = TestInstance();
 
-        visitedPointB.Should().BeTrue();
-    }
+            bool visitedPointB = false;
+            TestUtils.EmulateUpdate(() => 
+                {
+                    movement.Update();
+                    if(Visits(_pointB)) 
+                    { visitedPointB = true; }
+
+                }, _updatesForOneWayTrip + 1);
+
+            visitedPointB.Should().BeTrue();
+        }
 
     
-    [Test]
-    public void Transform_MustReturnToPointA()
-    {
-        var movement = TestInstance();
-
-        bool visitedPointA = false;
-        TestUtils.EmulateUpdate(() => 
+        [Test]
+        public void Transform_MustReturnToPointA()
         {
-            movement.Update();
-            if(Visits(_pointA)) 
-                { visitedPointA = true; }
+            var movement = TestInstance();
 
-        }, 2 * _updatesForOneWayTrip + 1);
+            bool visitedPointA = false;
+            TestUtils.EmulateUpdate(() => 
+                {
+                    movement.Update();
+                    if(Visits(_pointA)) 
+                    { visitedPointA = true; }
 
-        visitedPointA.Should().BeTrue();
-    }
+                }, 2 * _updatesForOneWayTrip + 1);
 
-    [Test]
-    public void Transform_MustMovePerpetually()
-    {
-        var movement = TestInstance();
+            visitedPointA.Should().BeTrue();
+        }
 
-        const int twoWayTrips = 10;
-
-        int timesVisitedA = 0;
-        int timesVisitedB = 0;
-
-        TestUtils.EmulateUpdate(() => 
+        [Test]
+        public void Transform_MustMovePerpetually()
         {
-            movement.Update();
+            var movement = TestInstance();
 
-            if(Visits(_pointA)) 
-                { timesVisitedA++; }
+            const int twoWayTrips = 10;
 
-            if(Visits(_pointB)) 
-                { timesVisitedB++; }
+            int timesVisitedA = 0;
+            int timesVisitedB = 0;
 
-        }, twoWayTrips * 2 * _updatesForOneWayTrip + 1);
+            TestUtils.EmulateUpdate(() => 
+                {
+                    movement.Update();
 
-        timesVisitedA.Should().BeGreaterOrEqualTo(twoWayTrips);
-        timesVisitedB.Should().BeGreaterOrEqualTo(twoWayTrips);
-    }
+                    if(Visits(_pointA)) 
+                    { timesVisitedA++; }
 
-    /// <summary>
-    /// true if _movementTransform comes sufficiently close to the point
-    /// </summary>
-    /// <returns></returns>
-    bool Visits(Vector3 point)
-    {
-        float dist = Vector3.Distance(_movingTransform.position, point);
-        return dist < Speed;
-    }
+                    if(Visits(_pointB)) 
+                    { timesVisitedB++; }
 
-    PendulumMovement TestInstance()
-    {
-        return  new PendulumMovement(_movingTransform, _pointB, Speed, Pause);
+                }, twoWayTrips * 2 * _updatesForOneWayTrip + 1);
+
+            timesVisitedA.Should().BeGreaterOrEqualTo(twoWayTrips);
+            timesVisitedB.Should().BeGreaterOrEqualTo(twoWayTrips);
+        }
+
+        /// <summary>
+        /// true if _movementTransform comes sufficiently close to the point
+        /// </summary>
+        /// <returns></returns>
+        bool Visits(Vector3 point)
+        {
+            float dist = Vector3.Distance(_movingTransform.position, point);
+            return dist < Speed;
+        }
+
+        PendulumMovement TestInstance()
+        {
+            return  new PendulumMovement(_movingTransform, _pointB, Speed, Pause);
+        }
     }
 }
