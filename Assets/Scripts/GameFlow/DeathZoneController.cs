@@ -11,7 +11,7 @@ namespace GameFlow
     public class DeathZoneController : NonGlobalSingleton<DeathZoneController>
     {
         [SerializeField]
-        Rabbit _rabbit;
+        RabbitMonoBehaviour _rabbitBehaviour;
         [SerializeField]
         GameObject[] _deathzones;
         [SerializeField]
@@ -22,10 +22,10 @@ namespace GameFlow
 
         void Start()
         {
-            var collisionListener = _rabbit.gameObject.AddComponent<Trigger2DListener>();
+            var collisionListener = _rabbitBehaviour.gameObject.AddComponent<Trigger2DListener>();
             collisionListener.EnterredTrigger += OnRabbitEnterredCollision;
 
-            _rabbitLives = _rabbit.Lives;
+            _rabbitLives = _rabbitBehaviour.Rabbit.Lives;
         }
 
         void OnRabbitEnterredCollision(Collider2D collision)

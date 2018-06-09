@@ -33,11 +33,11 @@ namespace InanimateObjects.Environment
             ResetPauseTimer();
         }
 
-        public void Update()
+        public void Update(float deltaTime)
         {
             if(_paused)
             {
-                _pauseTimer -= Time.deltaTime;
+                _pauseTimer -= deltaTime;
                 if(_pauseTimer <= 0f)
                 {
                     _paused = false;
@@ -45,7 +45,7 @@ namespace InanimateObjects.Environment
                 return;
             }
 
-            if(MoveTowardsTarget(Time.deltaTime))
+            if(MoveTowardsTarget(deltaTime))
             {
                 SwapTarget();
                 _paused = true;

@@ -15,7 +15,7 @@ namespace UnityApiDependent
         const float Speed = 1f;
         const float Pause = 1f;
         //float _dist;
-        int _updatesForOneWayTrip;
+        int _secondsForOneWayTrip;
 
 
         [SetUp]
@@ -24,7 +24,7 @@ namespace UnityApiDependent
             _movingTransform = new GameObject("moving").transform;
             _movingTransform.position = _pointA;
             float dist = Vector3.Distance(_pointA, _pointB);
-            _updatesForOneWayTrip = Mathf.CeilToInt(dist / Speed);
+            _secondsForOneWayTrip = Mathf.CeilToInt(dist / Speed);
         }
 
         [Test]
@@ -35,11 +35,11 @@ namespace UnityApiDependent
             bool visitedPointB = false;
             TestUtils.EmulateUpdate(() => 
                 {
-                    movement.Update();
+                    movement.Update(1f);
                     if(Visits(_pointB)) 
                     { visitedPointB = true; }
 
-                }, _updatesForOneWayTrip + 1);
+                }, _secondsForOneWayTrip + 1);
 
             visitedPointB.Should().BeTrue();
         }
@@ -53,11 +53,13 @@ namespace UnityApiDependent
             bool visitedPointA = false;
             TestUtils.EmulateUpdate(() => 
                 {
-                    movement.Update();
+                    movement.Update(1f);
+
+                    //Debug.Log($"pos: ")
                     if(Visits(_pointA)) 
                     { visitedPointA = true; }
 
-                }, 2 * _updatesForOneWayTrip + 1);
+                }, 2 * _secondsForOneWayTrip + 2);
 
             visitedPointA.Should().BeTrue();
         }
@@ -74,7 +76,7 @@ namespace UnityApiDependent
 
             TestUtils.EmulateUpdate(() => 
                 {
-                    movement.Update();
+                    movement.Update(1f);
 
                     if(Visits(_pointA)) 
                     { timesVisitedA++; }
@@ -82,7 +84,7 @@ namespace UnityApiDependent
                     if(Visits(_pointB)) 
                     { timesVisitedB++; }
 
-                }, twoWayTrips * 2 * _updatesForOneWayTrip + 1);
+                }, twoWayTrips * 2 * _secondsForOneWayTrip + 1);
 
             timesVisitedA.Should().BeGreaterOrEqualTo(twoWayTrips);
             timesVisitedB.Should().BeGreaterOrEqualTo(twoWayTrips);

@@ -22,7 +22,7 @@ namespace InanimateObjects.Environment
 	
         void Update () 
         {
-            _pendulumMovement.Update();
+            _pendulumMovement.Update(Time.deltaTime);
         }
     }
 }

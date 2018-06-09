@@ -15,7 +15,7 @@ namespace InanimateObjects.Collectables
     /// handles picking up collectables 
     /// and manages the rabbits state relevant to collectables
     /// </summary>
-    class RabbitStats
+    public class RabbitStats
     {
         public bool Enlarged { get; private set; }
         public int FruitsCollected { get; private set; }
@@ -24,10 +24,11 @@ namespace InanimateObjects.Collectables
         const float EnlargmentFactor = 1.6f;
         const double TimeEnlarged = 4f;
 
-        readonly Rabbit _rabbit;
+        readonly GameObject _rabbit;
         readonly PlayerMovement _playerMovement;
         readonly Respawner _respawner;
         readonly Animator _anim;
+        readonly LivesComponent _rabbitLives;
 
         readonly int _dieAnimHash;
         readonly float _rabbitColliderVertExtent;
@@ -39,7 +40,7 @@ namespace InanimateObjects.Collectables
         /// rabbit ref needed to handle damage on bomb pickup
         /// </summary>
         /// <param name="rabbit"></param>
-        public RabbitStats(Rabbit rabbit, PlayerMovement playerMovement, 
+        public RabbitStats(GameObject rabbit, PlayerMovement playerMovement, 
             Respawner respawner, Animator anim)
         {
             _rabbit = rabbit;
@@ -76,7 +77,7 @@ namespace InanimateObjects.Collectables
                         { StopRabbitsEnlargement(); }
                     else
                     {
-                        if(_rabbit.Lives.LoseLife())
+                        if(_rabbit.GetComponent<Rabbit>().Lives.LoseLife())
                         { CoroutineStarter.Instance.StartCoroutine(
                             PlayDeathAnimAndRespawnRabbitCoroutine()); }
                     }
@@ -126,9 +127,9 @@ namespace InanimateObjects.Collectables
                 _rabbit.GetComponent<Collider2D>().bounds.extents.y,
                 _rabbitColliderVertExtent, 0.1f);
 
-            _rabbit.gameObject.transform.Translate(Vector3.up * _rabbitColliderVertExtent);
+            _rabbit.transform.Translate(Vector3.up * _rabbitColliderVertExtent);
 
-            _rabbit.gameObject.transform.localScale = _rabbit.gameObject.transform.localScale * EnlargmentFactor;
+            _rabbit.transform.localScale = _rabbit.transform.localScale * EnlargmentFactor;
             _enlargementTimer = TimeEnlarged;
             Enlarged = true;
         }

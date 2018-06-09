@@ -6,48 +6,39 @@ using UnityEngine.Assertions;
 
 namespace Actors
 {
-    public class Rabbit : MonoBehaviour 
+    public class Rabbit 
     {
-        public LivesComponent Lives {get; private set;}
-
-        [SerializeField] 
-        int _startingLives;
-        [SerializeField] 
-        Respawner _respawner;
+        public LivesComponent Lives {get; }
 
         RabbitStats _stats;
 
-        #region monobehaviour
-        void Awake()
+        /// <summary>
+        /// for initializing from editor
+        /// </summary>
+        public Rabbit(GameObject rabbitGo, int startingLives, PlayerMovement movement, 
+            Respawner respawner, Animator anim)
+            : this(new LivesComponent(startingLives), 
+                new RabbitStats(rabbitGo, movement, respawner, anim))
+        {}
+
+        /// <summary>
+        /// mock constructor for tests
+        /// </summary>
+        public Rabbit(LivesComponent lives, RabbitStats stats)
         {
-            Lives = new LivesComponent(_startingLives);
+            Lives = lives;
+            _stats = stats;
         }
 
-        void Start()
+        public void Update(double deltaTime)
         {
-            var playerController = GetComponent<PlayerController>();
-
-            if(playerController == null)
-            { throw new MissingComponentException(
-                "the Rabbit monobehaviour requires that it's parent gameobject has a PlayerController component");  }
-
-            var anim = GetComponent<Animator>();
-            Assert.IsNotNull(anim);
-
-            _stats = new RabbitStats(this, playerController.PlayerMovement, _respawner, anim);
+            _stats.Update(deltaTime);
         }
 
-        void Update()
-        {
-            _stats.Update(Time.deltaTime);
-        }
-
-        void OnTriggerEnter2D(Collider2D otherCollider)
+        public void ManageTriggerEnter2D(Collider2D otherCollider)
         {
             if(_stats.TryPickup(otherCollider.gameObject))
                 { return; }
         }
-        #endregion monobehaviour
-
     }
 }
