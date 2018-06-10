@@ -20,7 +20,7 @@ namespace Actors
 
             if(playerController == null)
             { throw new MissingComponentException(
-                "the Rabbit monobehaviour requires that it's parent gameobject has a PlayerController component");  }
+                "The Rabbit monobehaviour requires that it's parent gameobject has a PlayerController component");  }
 
             var anim = GetComponent<Animator>();
             Assert.IsNotNull(anim);

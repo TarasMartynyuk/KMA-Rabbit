@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Actors;
 using Actors.Orcs;
 using InanimateObjects.Collectables;
@@ -7,6 +9,7 @@ using UnityEngine;
 using NSubstitute;
 using UnityEngine.TestTools;
 using static ReflectionUtils;
+using PlayerControl;
 
 namespace UnityApiDependent
 {
@@ -16,32 +19,29 @@ namespace UnityApiDependent
         GameObject _orcGo;
         //BoxCollider2D _orcCollider;
         ILivesComponent _livesMock;
+        Rabbit _mockedDependenciesRabbit;
         TestDerivedOrc _orcInstance;
+
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+
+        }
 
         [SetUp]
         public void SetUp()
         {
-            _rabbitGo = new GameObject(nameof(_rabbitGo));
-            var rabbitMB = _rabbitGo.AddComponent<RabbitMonoBehaviour>();
-            var coll = _rabbitGo.AddComponent<BoxCollider2D>();
-            coll.size = Vector2.one * 2;
-
             _livesMock = Substitute.For<ILivesComponent>();
             var statsMock = Substitute.For<IRabbitStats>();
-            var rabbit = new Rabbit(_livesMock, statsMock);
-
-            InsertProperty(nameof(RabbitMonoBehaviour.Rabbit), rabbit, rabbitMB);
-
-            _orcGo = new GameObject();
-            var orcCol = _rabbitGo.AddComponent<BoxCollider2D>();
-            orcCol.size = Vector2.one * 2;
-            _orcInstance = new TestDerivedOrc(_orcGo);
+            _mockedDependenciesRabbit = new Rabbit(_livesMock, statsMock);
+            InitRabbit();
+            InitOrc();
         }
 
         //[Test]
         public void PatrollingOnTurningAround_SwapsGameobject()
         {
-            var startScale = _orcGo.transform.localScale;
+            //var startScale = _orcGo.transform.localScale;
             //var
 
         }
@@ -56,15 +56,17 @@ namespace UnityApiDependent
 
             _orcGo.transform.position = Vector3.zero;
 
-            //var listener = _rabbitGo.AddComponent<Collision2DListener>();
-            //listener.EnterredColission += async () => {
-            //    Debug.Log("collided");
-            //    await Task.Delay(TimeSpan.FromSeconds(1));
-            //    _livesMock.Received(1).LoseLife();
-            //};
+            var listener = _rabbitGo.AddComponent<Collision2DListener>();
+            listener.EnterredColission += async () =>
+            {
+                Debug.Log("collided");
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                //_livesMock.Received(1).LoseLife();
+            };
 
-            yield return new WaitForSeconds(2);
-            _livesMock.Received(1).LoseLife();
+
+            yield return new WaitForSeconds(3);
+            //_livesMock.Received(1).LoseLife();
         }
 
         //[Test]
@@ -73,8 +75,6 @@ namespace UnityApiDependent
             //_orcGo.transform.position = Vector3.zero;
 
             //_rabbitGo.transform.position = new Vector3(0, )
-
-
         }
 
         //[Test]
@@ -90,6 +90,26 @@ namespace UnityApiDependent
 
 
         }
+
+        void InitRabbit()
+        {
+            _rabbitGo = new GameObject(nameof(_rabbitGo));
+            var rabbitMB = _rabbitGo.AddComponent<Mock>();
+
+            var coll = _rabbitGo.AddComponent<BoxCollider2D>();
+            coll.size = Vector2.one * 2;
+
+            InsertProperty<RabbitMonoBehaviour>(nameof(RabbitMonoBehaviour.Rabbit), _mockedDependenciesRabbit, rabbitMB);
+        }
+
+        void InitOrc()
+        {
+            _orcGo = new GameObject();
+            var orcCol = _orcGo.AddComponent<BoxCollider2D>();
+            orcCol.size = Vector2.one * 2;
+
+            _orcInstance = new TestDerivedOrc(_orcGo);
+        }
     }
 
     class TestDerivedOrc : AbstractOrc
@@ -97,5 +117,14 @@ namespace UnityApiDependent
         public TestDerivedOrc(GameObject gameObject) : base(gameObject)
         {
         }
+    }
+    /// <summary>
+    /// extending to remove RabbitMonoBehaviour's Awake when adding it to gameobject 
+    /// (the members that we need in test are mocked inserted through reflection)
+    /// </summary>
+    class Mock : RabbitMonoBehaviour
+    {
+        //new public Rabbit Rabbit { get; private set; }
+        void Awake() {}
     }
 }
