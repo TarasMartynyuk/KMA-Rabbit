@@ -57,11 +57,12 @@ namespace UnityApiDependent
             _orcGo.transform.position = Vector3.zero;
 
             var listener = _rabbitGo.AddComponent<Collision2DListener>();
-            listener.EnterredColission += async () =>
+            listener.EnterredColission += coll =>
             {
                 Debug.Log("collided");
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                //_livesMock.Received(1).LoseLife();
+                _orcInstance.ManageCollision(coll);
+
+                _livesMock.Received(1).LoseLife();
             };
 
 
@@ -94,7 +95,7 @@ namespace UnityApiDependent
         void InitRabbit()
         {
             _rabbitGo = new GameObject(nameof(_rabbitGo));
-            var rabbitMB = _rabbitGo.AddComponent<Mock>();
+            var rabbitMB = _rabbitGo.AddComponent<MockRabbitMonoBehaviour>();
 
             var coll = _rabbitGo.AddComponent<BoxCollider2D>();
             coll.size = Vector2.one * 2;
@@ -122,7 +123,7 @@ namespace UnityApiDependent
     /// extending to remove RabbitMonoBehaviour's Awake when adding it to gameobject 
     /// (the members that we need in test are mocked inserted through reflection)
     /// </summary>
-    class Mock : RabbitMonoBehaviour
+    class MockRabbitMonoBehaviour : RabbitMonoBehaviour
     {
         //new public Rabbit Rabbit { get; private set; }
         void Awake() {}
