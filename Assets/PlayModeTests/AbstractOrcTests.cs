@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using Actors;
 using Actors.Orcs;
+using FluentAssertions;
+using FluentAssertions.Execution;
+using FluentAssertions.Primitives;
 using InanimateObjects.Collectables;
-using NUnit.Framework;
-using UnityEngine;
 using NSubstitute;
+using NUnit.Framework;
+using PlayModeTests.Utils;
+using UnityEngine;
 using UnityEngine.TestTools;
-using static ReflectionUtils;
-using PlayerControl;
 
-namespace UnityApiDependent
+namespace PlayModeTests
 {
     public class AbstractOrcTests
     {
@@ -50,8 +50,7 @@ namespace UnityApiDependent
         public IEnumerator DestroysGameobject_WhenRabbitJumpsStraightFromTop()
         {
             _rabbitGo.transform.position = new Vector3(0f, 4.1f, 0f);
-            var rigibBody = _rabbitGo.AddComponent<Rigidbody2D>();
-            rigibBody.bodyType = RigidbodyType2D.Dynamic;
+            _rabbitGo.AddComponent<Rigidbody2D>();
             // now rabbit will fall onto the orc
 
             _orcGo.transform.position = Vector3.zero;
@@ -61,18 +60,24 @@ namespace UnityApiDependent
             {
                 Debug.Log("collided");
                 _orcInstance.ManageCollision(coll);
-
-                _livesMock.Received(1).LoseLife();
+                //Object.Destroy(_orcGo);
             };
 
-
-            yield return new WaitForSeconds(3);
-            //_livesMock.Received(1).LoseLife();
+            yield return new WaitForSeconds(2.0f);
+            bool b = _orcGo == null;
+            _orcGo.Should().BeDestroyed();
         }
 
-        //[Test]
-        public void DestroysGameobject_WhenRabbitJumpsFromTop_In45DegreeAngle()
+        [UnityTest]
+        public IEnumerator DestroysGameobject_WhenRabbitJumpsFromTop_In45DegreeAngle()
         { 
+            var go = new GameObject("go");
+            Object.Destroy(go);
+
+            yield return new WaitForEndOfFrame();
+
+            bool b = go == null;
+            go.Should().BeDestroyed();
             //_orcGo.transform.position = Vector3.zero;
 
             //_rabbitGo.transform.position = new Vector3(0, )
@@ -100,12 +105,12 @@ namespace UnityApiDependent
             var coll = _rabbitGo.AddComponent<BoxCollider2D>();
             coll.size = Vector2.one * 2;
 
-            InsertProperty<RabbitMonoBehaviour>(nameof(RabbitMonoBehaviour.Rabbit), _mockedDependenciesRabbit, rabbitMB);
+            ReflectionUtils.InsertProperty<RabbitMonoBehaviour>(nameof(RabbitMonoBehaviour.Rabbit), _mockedDependenciesRabbit, rabbitMB);
         }
 
         void InitOrc()
         {
-            _orcGo = new GameObject();
+            _orcGo = new GameObject(nameof(_orcGo));
             var orcCol = _orcGo.AddComponent<BoxCollider2D>();
             orcCol.size = Vector2.one * 2;
 
@@ -116,8 +121,7 @@ namespace UnityApiDependent
     class TestDerivedOrc : AbstractOrc
     {
         public TestDerivedOrc(GameObject gameObject) : base(gameObject)
-        {
-        }
+        {}
     }
     /// <summary>
     /// extending to remove RabbitMonoBehaviour's Awake when adding it to gameobject 
@@ -127,5 +131,24 @@ namespace UnityApiDependent
     {
         //new public Rabbit Rabbit { get; private set; }
         void Awake() {}
+    }
+
+    public class GameObjectAssertions : ReferenceTypeAssertions<GameObject, GameObjectAssertions>
+    {
+        protected override string Identifier => "id";
+
+        public GameObjectAssertions(GameObject assertedGo) 
+        {
+            Subject = assertedGo;
+        }
+
+        public AndConstraint<object> BeDestroyed()
+        {
+            bool destroyed = Subject == null;
+            Execute.Assertion.
+                ForCondition(destroyed).
+                FailWith($"Expected gameobject {(destroyed ? "" : $"\"{Subject.name}\"")} to be destroyed");
+            return new AndConstraint<object>(this);
+        }
     }
 }

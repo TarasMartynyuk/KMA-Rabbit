@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace UnityApiDependent
+namespace PlayModeTests
 {
     class MeleeOrkTests
     {

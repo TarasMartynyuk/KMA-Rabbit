@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace UnityApiDependent
 {
+    // this actually should be a playmode test
     [TestFixture]
     public class PendulumMovementTests
     {
@@ -43,7 +44,6 @@ namespace UnityApiDependent
 
             visitedPointB.Should().BeTrue();
         }
-
     
         [Test]
         public void Transform_MustReturnToPointA()
