@@ -56,15 +56,13 @@ namespace PlayModeTests
             _orcGo.transform.position = Vector3.zero;
 
             var listener = _rabbitGo.AddComponent<Collision2DListener>();
-            listener.EnterredColission += coll =>
-            {
-                Debug.Log("collided");
-                _orcInstance.ManageCollision(coll);
-                //Object.Destroy(_orcGo);
-            };
+            listener.EnterredColission += 
+                coll => _orcInstance.ManageCollision(coll);
 
-            yield return new WaitForSeconds(2.0f);
-            bool b = _orcGo == null;
+            yield return new WaitUntil(() => listener.HasCollided);
+            // as gameobject is destroyed after frame ends
+            yield return new WaitForEndOfFrame();
+
             _orcGo.Should().BeDestroyed();
         }
 
