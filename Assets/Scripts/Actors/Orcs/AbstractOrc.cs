@@ -1,7 +1,6 @@
 ﻿using InanimateObjects.Environment;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.Assertions;
 
 namespace Actors.Orcs
 {
@@ -15,14 +14,23 @@ namespace Actors.Orcs
 
         public void ManageCollision(Collision2D collision)
         {
+
+            if(! collision.gameObject.CompareTag("Player"))
+            { return; }
+
             // contacts prop produces garbage, yada-yada - 
             // we do this only usually once for orc instance
             if(collision.contacts.Any(contact => contact.normal.y >= 0.9f))
-            { Object.Destroy(_parent); }
+                { Object.Destroy(_parent); }
             else
             {
                 var rabbitScript = collision.gameObject.GetComponent<RabbitMonoBehaviour>();
-                Assert.IsNotNull(collision.gameObject.GetComponent<RabbitMonoBehaviour>());
+                if(rabbitScript == null)
+                {
+                    throw new MissingComponentException(
+                        $"the object which tagged Player must have a {nameof(RabbitMonoBehaviour)} component");
+                }
+                
                 rabbitScript.Rabbit.Lives.LoseLife();
             }
         }
