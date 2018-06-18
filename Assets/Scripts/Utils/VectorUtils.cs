@@ -4,6 +4,11 @@ namespace Utils
 {
     public static class VectorUtils
     {
+        public static Vector3 AddZCoord(Vector2 vec, float z)
+        {
+            return new Vector3(vec.x, vec.y, z);
+        }
+
         public static Vector3 ElementviseMult(Vector3 left, Vector3 right)
         {
             return new Vector3(
@@ -17,6 +22,23 @@ namespace Utils
             return new Vector2(
                 left.x + right,
                 left.y + right);
+        }
+
+
+        public static Vector3 ScalarDivision(float scalar, Vector3 vec)
+        {
+            return new Vector3(
+                scalar / vec.x,
+                scalar / vec.y,
+                scalar / vec.z);
+        }
+
+        public static Vector3 ElementwiseDivision(Vector3 left, Vector3 right)
+        {
+            return new Vector3(
+                left.x / right.x,
+                left.y / right.y,
+                left.z / right.z);
         }
 
         public static Vector3 Direction(Vector3 point, Vector3 target)

@@ -7,6 +7,8 @@ using NUnit.Framework;
 using PlayModeTests.Utils;
 using UnityEngine;
 using UnityEngine.TestTools;
+using static PlayModeTests.Utils.Visualization;
+using System.Linq;
 
 namespace PlayModeTests
 {
@@ -22,7 +24,10 @@ namespace PlayModeTests
         TestDerivedOrc _orcInstance;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp() { }
+        public void OneTimeSetUp()
+        {
+            AddCameraToScene();
+        }
 
         [SetUp]
         public void SetUp()
@@ -47,7 +52,7 @@ namespace PlayModeTests
         {
             SetupRabbitToFallFromTop();
 
-            var listener = AddManageCollisionsListener(_rabbitGo, _orcInstance);
+            var listener = AddManageCollisionsListener(_orcGo, _orcInstance);
 
             yield return WaitUntilCollidedPlusOneFrame(listener);
             _orcGo.Should().BeDestroyed();
@@ -66,22 +71,19 @@ namespace PlayModeTests
             // move orc in the top-left direction for rabbit, until they collide
             rb.velocity = new Vector2(1f, - 1f);
 
-            var listener = _rabbitGo.AddComponent<Collision2DListener>();
-            listener.EnterredColission += _ => Debug.Log("collided");
-            listener.EnterredColission += coll => _orcInstance.ManageCollision(coll);
+            var listener = AddManageCollisionsListener(_orcGo, _orcInstance);
 
-            while (! listener.HasCollided) { yield return new WaitForEndOfFrame(); }
-
-            yield return new WaitForEndOfFrame();
+            yield return WaitUntilCollidedPlusOneFrame(listener);
             _orcGo.Should().BeDestroyed();
         }
 
         [UnityTest]
-        public IEnumerator ManageCollision_Ignores_ObjectsNotTaggedPlayer()
+        public IEnumerator ManageCollision_Ignores_ObjectsNotTaggedPlayer() 
         {
             SetupRabbitToFallFromTop();
+            _rabbitGo.tag = "Untagged";
 
-            var listener = AddManageCollisionsListener(_rabbitGo, _orcInstance);
+            var listener = AddManageCollisionsListener(_orcGo, _orcInstance);
 
             yield return WaitUntilCollidedPlusOneFrame(listener);
             _orcGo.Should().NotBeDestroyed();
@@ -93,13 +95,16 @@ namespace PlayModeTests
         //[Test]
         public void RabbitLosesLife_WhenJumpsFromSides() { }
 
+        #region helpers
         void InitRabbit()
         {
-            _rabbitGo = new GameObject(nameof(_rabbitGo));
+            _rabbitGo = new GameObject(nameof(_rabbitGo)) { tag = "Player" };
             var rabbitMB = _rabbitGo.AddComponent<MockRabbitMonoBehaviour>();
 
+            AddLabelToGameObject(_rabbitGo, "Rabbit");
+
             var coll = _rabbitGo.AddComponent<BoxCollider2D>();
-            coll.size = Vector2.one * 2;
+            coll.size = Vector2.one;
 
             ReflectionUtils.InsertProperty<RabbitMonoBehaviour>(nameof(RabbitMonoBehaviour.Rabbit),
                 _mockedDependenciesRabbit, rabbitMB);
@@ -108,8 +113,10 @@ namespace PlayModeTests
         void InitOrc()
         {
             _orcGo = new GameObject(nameof(_orcGo));
+            AddLabelToGameObject(_orcGo, "Orc");
+
             var orcCol = _orcGo.AddComponent<BoxCollider2D>();
-            orcCol.size = Vector2.one * 2;
+            orcCol.size = Vector2.one;
 
             _orcInstance = new TestDerivedOrc(_orcGo);
         }
@@ -117,27 +124,32 @@ namespace PlayModeTests
         IEnumerator WaitUntilCollidedPlusOneFrame(Collision2DListener listener)
         {
             yield return new WaitUntil(() => listener.HasCollided);
+            Debug.Break();
             // as gameobject is destroyed after frame ends
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(0.3f);
         }
 
-        static Collision2DListener AddManageCollisionsListener(GameObject rabbit, TestDerivedOrc orc)
+        static Collision2DListener AddManageCollisionsListener(GameObject orcGo, TestDerivedOrc orc)
         {
-            var listener = rabbit.AddComponent<Collision2DListener>();
-            listener.EnterredColission += coll => orc.ManageCollision(coll);
+            var listener = orcGo.AddComponent<Collision2DListener>();
             listener.EnterredColission += _ => Debug.Log("collided");
+            listener.EnterredColission += coll => orc.ManageCollision(coll);
+            listener.EnterredColission += coll => coll.contacts.ToList().ForEach(
+                p => Debug.DrawLine(p.point, p.point + p.normal));
 
             return listener;
         }
 
         void SetupRabbitToFallFromTop()
         {
-            _rabbitGo.transform.position = new Vector3(0f, 4.1f, 0f);
+            _rabbitGo.transform.position = new Vector3(0f, 5f, 0f);
             _rabbitGo.AddComponent<Rigidbody2D>();
+            _rabbitGo.tag = "Player";
 
             _orcGo.transform.position = Vector3.zero;
             // now rabbit will fall onto the orc
         }
+        #endregion
 
         #region mocks
 

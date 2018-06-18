@@ -48,6 +48,7 @@ namespace PlayModeTests.Utils
             textGo.transform.SetParent(canvas.transform);
             var rectTransform = textGo.GetComponent<RectTransform>();
 
+            canvas.transform.SetParent(gameObject.transform);
             Debug.Break();
 
             // span image
